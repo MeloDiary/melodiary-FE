@@ -203,14 +203,13 @@ const InfoBox = styled.div`
       font-family: ${({ theme }) => theme.fontFamily.kor};
       
       .name {
-        
         font-size: ${({ theme }) => theme.title.title4};
         font-weight: 400;
       }
       
       .num {
         font-size: ${({ theme }) => theme.title.title3};
-        font-weight: 600;
+        font-weight: 500;
       }
     }
   }
@@ -265,7 +264,7 @@ const FeedItem = styled.li<{ isActive: boolean }>`
   gap: 4px;
   padding: 8px 16px;
   color: ${({ theme, isActive }) => isActive ? theme.color.greenblue : theme.color.grayblack};
-  font-weight: 600;
+  font-weight: 400;
   border-radius: 8px;
   transition: all 0.15s ease-in-out;
   cursor: pointer;

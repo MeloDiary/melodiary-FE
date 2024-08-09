@@ -259,7 +259,7 @@ const TrackText = styled.div`
 
 const TrackTitle = styled.div`
   font-size: ${({ theme }) => theme.text.text1};
-  font-weight: bold;
+  font-weight: 600;
   color: ${({ theme }) => theme.color.black};
 `;
 

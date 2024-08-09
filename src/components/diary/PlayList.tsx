@@ -115,13 +115,15 @@ const Table = styled.table`
   border-spacing: 0; 
   border: 1px solid ${({ theme }) => theme.color.grayDF}; 
   border-radius: 8px;
-  font-family: ${({ theme }) => theme.fontFamily.kor};
   .playListHeader th {
-    border-bottom: 1px solid ${({ theme }) => theme.color.grayDF}; 
+    border-bottom: 1px solid ${({ theme }) => theme.color.grayDF};
+    font-family: ${({ theme }) => theme.fontFamily.kor};
   }
   th, td {
-    padding: 10px;
+    padding: 12px 10px;
     border: none;
+    font-family: ${({ theme }) => theme.fontFamily.kor};
+    font-size: 14px;
   }
 `;
 

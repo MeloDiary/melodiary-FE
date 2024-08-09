@@ -269,6 +269,7 @@ const Table = styled.table`
   th {
     padding: 10px 0 15px;
     background-color: transparent;
+    font-weight: 400;
   }
 `;
 

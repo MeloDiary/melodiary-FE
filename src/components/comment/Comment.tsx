@@ -134,12 +134,14 @@ const DefaultProfileIcon = styled(FaUserCircle)`
 `;
 
 const Username = styled.div`
-  font-weight: bold;
+  margin-bottom: 2px;
   font-size: ${({ theme }) => theme.text.text3};
+  font-weight: 500;
 `;
 
 const CommentDate = styled.div`
   color: ${({ theme }) => theme.color.gray999};
+  font-size: ${({ theme }) => theme.text.text3};
 `;
 
 const CommentText = styled.div`

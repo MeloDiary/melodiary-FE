@@ -51,7 +51,8 @@ const MainLayout = styled.div`
   justify-content: flex-start;
   /* align-items: flex-start; */
   width: 100%;
-  height: calc(100vh - 64px);
+  /* height: calc(100vh - 64px); */
+  height: 100%;
 
   main {
     width: 100%;

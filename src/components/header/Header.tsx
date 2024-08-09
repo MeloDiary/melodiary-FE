@@ -156,7 +156,7 @@ const Logo = styled.div`
   h1 {
     margin-left: 10px;
     font-size: ${({ theme }) => theme.title.title3};
-    font-weight: bold;
+    font-weight: 600;
     background: linear-gradient(90deg, #9ad9ea, #202879);
     background-clip: text;
     -webkit-background-clip: text;

@@ -52,7 +52,7 @@ const Logo = styled.div`
     background-clip: text;
     color: transparent;
     font-size: ${({ theme }) => theme.title.title3};
-    font-weight: bold;
+    font-weight: 600;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }

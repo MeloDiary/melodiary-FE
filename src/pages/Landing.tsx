@@ -55,7 +55,7 @@ const LandingContainer = styled.main`
   h1 {
     margin-bottom: 20px;
     font-size: 64px;
-    font-weight: 650;
+    font-weight: 600;
   }
   p {
     margin-bottom: 1em;
