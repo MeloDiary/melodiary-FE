@@ -1,10 +1,10 @@
-interface IMusic {
+export interface IMusic {
   music_url: string;
   title: string;
   artist: string;
 }
 
-interface IWeather {
+export interface IWeather {
   location: string;
   icon: string;
   avg_temperature: number;

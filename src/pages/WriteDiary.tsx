@@ -9,14 +9,70 @@ import EmojiPicker from 'emoji-picker-react';
 import DiaryPreview from '../components/diary/DiaryPreview';
 import { colors, moods, privacies } from '../constants/writeDiary';
 import { useGeoLocation } from '../hooks/useGeoLocation';
+import { useDiaries } from '../hooks/useDiary';
+import { IDiary } from '../models/diary.model';
+import { useNavigate } from 'react-router-dom';
 
 const geolocationOptions = {
   enableHighAccuracy: true,
-  timeout: 1000 * 10,
+  timeout: 1000 * 30,
   maximumAge: 1000 * 3600 * 24,
 }
 
 const WriteDiary = () => {
+  // 상태 변수 선언
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [selectedEmoji, setSelectedEmoji] = useState<string>("");
+  const [selectedBgColor, setSelectedBgColor] = useState<string>("default");
+  const [selectedMood, setSelectedMood] = useState<string>("😍");
+  const [selectedPrivacy, setSelectedPrivacy] = useState<string>(privacies[2]);
+  const [musicTitle, setMusicTitle] = useState<string>("");
+  const [musicArtist, setMusicArtist] = useState<string>("");
+  const [musicUrl, setMusicUrl] = useState<string>("");
+  const [weatherIcon, setWeatherIcon] = useState<string>("");
+  const [weatherLocation, setWeatherLocation] = useState<string>(""); // 위치
+  const [weatherTemp, setWeatherTemp] = useState<number>(0);
+
+  const navigate = useNavigate();
+
+  const { saveDiary, loading, wirteDiaryErr } = useDiaries();
+
+  // 일기 데이터 작성 및 제출
+  const handleSubmit = async () => {
+    const diaryData: IDiary["body"] = {
+      title: title || "",
+      content: content || "",
+      img_urls: [], // 예시로 비워둠. 이미지 URL을 관리할 필요가 있음
+      mood: selectedMood || "😍",
+      emoji: selectedEmoji || "",
+      privacy: (selectedPrivacy as "public" | "mate" | "private") || privacies[2],
+      music: {
+        title: musicTitle || "",
+        artist: musicArtist || "",
+        music_url: musicUrl || "",
+      },
+      weather: {
+        icon: weatherIcon || "",
+        location: weatherLocation || "",
+        avg_temperature: weatherTemp || 0,
+      },
+      background_color: selectedBgColor || "default",
+    };
+    
+    await saveDiary(diaryData); // saveDiary 호출
+
+    // if (diaryData) {
+    //   window.alert("일기가 저장되었습니다.");
+    //   navigate("/home");
+    // } else {
+    //   window.alert("모든 항목을 작성해주세요.");
+    //   window.location.reload();
+    // }
+
+  };
+  
+
   // 날짜, 요일
   const week = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
   const today = new Date();
@@ -25,18 +81,44 @@ const WriteDiary = () => {
 
   // 날씨
   const { location, error } = useGeoLocation(geolocationOptions);
-  if(location) {
-    console.log("위도 : ", location?.latitude);
-    console.log("경도 : ", location?.longitude);
-  } else {
-    console.log("GeoLocationError : ", error);
-  }
-  
-  // 상태 (오늘의 이모지, 배경 색상, 기분, 공개 범위)
-  const [selectedEmoji, setSelectedEmoji] = useState<string>("");
-  const [selectedBgColor, setSelectedBgColor] = useState<string>("default");
-  const [selectedMood, setSelectedMood] = useState<string>("😍");
-  const [selectedPrivacy, setSelectedPrivacy] = useState<string>(privacies[2]);
+  let lat = location?.latitude;
+  let long = location?.longitude;
+  // console.log("위도 : ", lat);
+  // console.log("경도 : ", long);
+
+  useEffect(() => {
+    if(lat && long !== undefined) {
+      fetch(`https://api.melodiary.site/api/weather?latitude=${lat}&longitude=${long}`, {
+        headers: {
+          'Authorization': `Bearer ${process.env.REACT_APP_ACCESS_TOKEN}`
+        }
+      })
+      .then(res => res.json())
+      .then((data) => {
+        setWeatherIcon(data.icon);
+        setWeatherLocation(data.location);
+        setWeatherTemp(data.avg_temperature);
+      })
+      .catch((err) => {
+        console.log("날씨 정보 불러오기 에러 : ", err);
+      })
+    } else {
+      fetch(`https://api.melodiary.site/api/weather?latitude=37.564214&longitude=127.001699`, {
+        headers: {
+          'Authorization': `Bearer ${process.env.REACT_APP_ACCESS_TOKEN}`
+        }
+      })
+      .then(res => res.json())
+      .then((data) => {
+        setWeatherIcon(data.icon);
+        setWeatherLocation("Seoul");
+        setWeatherTemp(data.avg_temperature);
+      })
+      .catch((err) => {
+        console.log("날씨 정보 불러오기 에러 : ", err);
+      })
+    }
+  }, [weatherLocation]);
 
   // 드롭다운 여부 (오늘의 이모지, 배경 색상, 기분, 공개 범위, 미리보기)
   const [isEmojiDropdown, setIsEmojiDropdown] = useState(false);
@@ -127,12 +209,12 @@ const WriteDiary = () => {
 
   const getPrivacyIcon = (privacyName: string) => {
     switch (privacyName) {
-      case "전체 공개":
-        return <RiGlobalLine />;
-      case "친구 공개":
-        return <FiUser />;
-      case "비공개":
-        return <FiLock />;
+      case "public":
+        return <><RiGlobalLine /> 전체 공개</>;
+      case "mate":
+        return <><FiUser /> 친구 공개</>;
+      case "private":
+        return <><FiLock /> 비공개</>;
       default:
         return null;
     }
@@ -141,7 +223,22 @@ const WriteDiary = () => {
   return (
     <WriteDiaryWrapper bgColor={selectedBgColor}>
       {isPreviewOpen && (
-        <DiaryPreview selectedBgColor={selectedBgColor} />
+        <DiaryPreview
+          title={title}
+          content={content}
+          selectedEmoji={selectedEmoji}
+          selectedBgColor={selectedBgColor}
+          selectedMood={selectedMood}
+          selectedPrivacy={selectedPrivacy}
+          musicTitle={musicTitle}
+          musicArtist={musicArtist}
+          musicUrl={musicUrl}
+          formattedDate={formattedDate}
+          location={''} 
+          weatherIcon={''} 
+          avgTemperature={''} 
+          imgUrls={[]}
+        />
       )}
       <WriteDiaryContents>
         {/* 아이콘 추가, 배경 색상 추가 */}
@@ -192,6 +289,7 @@ const WriteDiary = () => {
         <Title
           type="text"
           placeholder="제목"
+          onChange={(e) => setTitle(e.target.value)}
         />
         {/* 오늘의 기분 */}
         <Section className="mood">
@@ -219,7 +317,13 @@ const WriteDiary = () => {
         {/* 오늘의 날씨 */}
         <Section className="weather">
           <label>날씨</label>
-          <span>31C 맑음</span>
+          <div className="weather-info">
+            <span>{weatherLocation}</span>
+            <span>/</span>
+            <span>{weatherIcon}</span>
+            <span>/</span>
+            <span>{weatherTemp}℃</span>
+          </div>
         </Section>
         {/* 오늘의 음악 */}
         <Section className="music">
@@ -228,14 +332,20 @@ const WriteDiary = () => {
             <input
               type="text"
               placeholder="TITLE"
+              value={musicTitle}
+              onChange={(e) => setMusicTitle(e.target.value)}
             />
             <input
               type="text"
               placeholder="ARTIST"
+              value={musicArtist}
+              onChange={(e) => setMusicArtist(e.target.value)}
             />
             <input
               type="text"
               placeholder="YOUTUBE URL"
+              value={musicUrl}
+              onChange={(e) => setMusicUrl(e.target.value)}
             />
           </div>
         </Section>
@@ -244,23 +354,27 @@ const WriteDiary = () => {
           <label>공개범위</label>
           <div className="select-privacy-box" ref={privacyDropdownRef}>
             <div className="selected-privacy" onClick={tooglePrivacyDropdown}>
-                {getPrivacyIcon(selectedPrivacy)}
-                <span>{selectedPrivacy}</span>
-              </div>
-              {isPrivacyDropdown && (
-                <ul className="privacy-list">
-                  {privacies.map((privacy) => (
-                    <li key={privacy} onClick={() => selectPrivacyOption(privacy)}>
-                      {getPrivacyIcon(privacy)}
-                      <span>{privacy}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              {getPrivacyIcon(selectedPrivacy)}
+            </div>
+            {isPrivacyDropdown && (
+              <ul className="privacy-list">
+                {privacies.map((privacy) => (
+                  <li 
+                    key={privacy} 
+                    onClick={() => selectPrivacyOption(privacy)}
+                  >
+                    {getPrivacyIcon(privacy)}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </Section>
         {/* 일기 작성 에디터 */}
-        <DiaryEditor />
+        <DiaryEditor
+          content={content}
+          onChange={setContent}
+        />
         {/* 미리보기, 등록하기 BTN */}
         <SubmitBox ref={previewOpenRef}>
           <Button
@@ -271,10 +385,17 @@ const WriteDiary = () => {
           >
             <FiSearch size={16} /> 미리보기
           </Button>
-          <Button size="short" schema="gray">
-            <FiSend size={16} /> 등록하기
+          <Button 
+            size="short" 
+            schema="gray"
+            onClick={handleSubmit} // 제출 버튼에 이벤트 핸들러 연결
+            disabled={loading} // 로딩 중에는 버튼 비활성화
+          >
+            <FiSend size={16} />
+            {loading ? "저장 중..." : "등록하기"}
           </Button>
         </SubmitBox>
+        {error && <p>{error}</p>} {/* 오류 메시지 표시 */}
       </WriteDiaryContents>
     </WriteDiaryWrapper>
   )
@@ -433,9 +554,11 @@ const Section = styled.div`
       display: flex;
       flex-direction: column;
       gap: 10px;
+      flex: 1;
       padding: 4px 0;
 
       input {
+        width: 100%;
         color: ${({ theme }) => theme.color.gray777};
       }
     }
@@ -480,6 +603,14 @@ const Section = styled.div`
         }
       }
     }
+  }
+  // 날씨 정보
+  .weather-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
   }
 
   /* 일기 공개 범위 */

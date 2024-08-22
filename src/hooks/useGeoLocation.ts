@@ -6,16 +6,12 @@ interface ILocation {
 }
 
 export const useGeoLocation = (options = {}) => {
-  const [location, setLocation] = useState<ILocation>();
-  const [error, setError] = useState("");
+  const [location, setLocation] = useState<ILocation | null>(null);
+  const [error, setError] = useState('');
 
   const handleSuccess = (pos: GeolocationPosition) => {
     const { latitude, longitude } = pos.coords;
-
-    setLocation({
-      latitude,
-      longitude,
-    });
+    setLocation({ latitude, longitude });
   };
 
   const handleError = (err: GeolocationPositionError) => {
@@ -26,11 +22,13 @@ export const useGeoLocation = (options = {}) => {
     const { geolocation } = navigator;
 
     if (!geolocation) {
-      setError("Geolocation is not supported.");
+      setError('Geolocation is not supported.');
+      setLocation({ latitude: 37.5665, longitude: 126.9780 });
       return;
     }
 
     geolocation.getCurrentPosition(handleSuccess, handleError, options);
+
   }, [options]);
 
   return { location, error };

@@ -7,6 +7,7 @@ import AllDiaries from '../components/mypage/AllDiaries';
 import MoodGraph from '../components/mypage/MoodGraph';
 import Playlist from '../components/mypage/Playlist';
 import Settings from '../components/mypage/Settings';
+import { useMyPage } from '../hooks/useMyPage';
 
 const MyPage = () => {
   const tabs = [
@@ -33,6 +34,7 @@ const MyPage = () => {
   ];
 
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
+  const { userProfile } = useMyPage();
 
   return (
     <MyPageWrapper>
@@ -52,16 +54,16 @@ const MyPage = () => {
             <ProfileImg>
               <div className="image"></div>
             </ProfileImg>
-            <div className="nickname">meow</div>
-            <div className="email">meow@gmail.com</div>
+            <div className="nickname">{userProfile?.nickname}</div>
+            <div className="email">{userProfile?.email_address}</div>
             <div className="count">
               <div className="item mates">
                 <span className="name">친구</span>
-                <span className="num">5</span>
+                <span className="num">{userProfile?.mate_count}</span>
               </div>
               <div className="item diaries">
                 <span className="name">일기</span>
-                <span className="num">24</span>
+                <span className="num">{userProfile?.diary_count}</span>
               </div>
             </div>
           </InfoBox>
@@ -82,7 +84,7 @@ const MyPage = () => {
                   {tab.title === selectedTab.title && (
                     <FeedItemBackground
                       layoutId="feedActiveBackground"
-                      initial={false}
+                      initial={ false }
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.15 }}
@@ -290,8 +292,9 @@ const FeedContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
+  /* padding: 20px 0; */
+  padding-top: 20px;
+  padding-bottom: 60px;
   width: 100%;
   height: 100%;
-  border: 1px solid blue;
 `;

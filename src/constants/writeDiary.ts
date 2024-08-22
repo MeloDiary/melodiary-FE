@@ -16,4 +16,4 @@ export const colors = [
 
 export const moods = ["😍", "😆", "🙂", "😟", "😡"];
 
-export const privacies = ["전체 공개", "친구 공개", "비공개"];
+export const privacies = ["public", "mate", "private"];

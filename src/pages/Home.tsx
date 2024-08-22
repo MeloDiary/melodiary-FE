@@ -45,22 +45,16 @@ const Home = () => {
   const [isExpanded, setIsExpanded] = useState(state?.isExpanded ?? false);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/");
-    }
-  }, [isAuthenticated, navigate]);
-
-  useEffect(() => {
     if (userId && user_id) {
       setIsOwnProfile(userId === user_id); // userId와 user_id가 같은지 비교
     }
   }, [userId, user_id]);
 
-  useEffect(() => {
-    if (parsedUserId) {
-      setDiaryId(69);
-    }
-  }, [parsedUserId]);
+  // useEffect(() => {
+  //   if (parsedUserId) {
+  //     setDiaryId(69);
+  //   }
+  // }, [parsedUserId]);
 
   useEffect(() => {
     if (state?.isExpanded !== undefined) {

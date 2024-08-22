@@ -1,15 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { useAuth } from '../context/AuthContext'; 
-import { logoutUtility } from './logoutUtility'; 
+import { logoutUtility } from '../util/logoutUtility'; 
 import { useState } from "react";
-const DEFAULT_PORT = process.env.REACT_APP_PORT;
-//const accessToken = process.env.REACT_APP_AccessToken;
-const accessToken = localStorage.getItem('access_token');
 
-//const BASE_URL = `http://localhost:${DEFAULT_PORT}`;
-// const BASE_URL = `http://localhost:4000`;
-
-//const BASE_URL = `http://localhost:${DEFAULT_PORT}`;
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const DEFAULT_TIMEOUT = 10000 * 60;
 
@@ -67,6 +60,7 @@ export const createClient = (config?: AxiosRequestConfig) => {
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         try {
+          console.log("토큰 재발급");
           const newAccessToken = await refreshToken();
           originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
           return axiosInstance(originalRequest);

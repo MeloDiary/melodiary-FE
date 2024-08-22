@@ -20,18 +20,15 @@ const formats = [
   'align', 'link', 'image'
 ];
 
-const DiaryEditor = () => {
-  const [text, setText] = useState('');
-
-  const handleChange = (value: any) => {
-    setText(value);
-  };
-
+const DiaryEditor = ({ content, onChange }: { 
+  content: string, 
+  onChange: (value: string) => void 
+}) => {
   return (
     <DiaryEditorWrapper>
       <ReactQuill
-        value={text} 
-        onChange={handleChange} 
+        value={content} 
+        onChange={onChange} 
         modules={modules} 
         formats={formats} 
       />

@@ -35,11 +35,12 @@ const NickName = () => {
     }
     const userId = localStorage.getItem('user_id');
     const accessToken = localStorage.getItem('access_token');
+    const refreshToken = localStorage.getItem('refresh_token');
     try {
-      if (userId && accessToken) {
+      if (userId && accessToken && refreshToken) {
         const response = await registerNickname(userId, nickname);
         console.log('닉네임 등록 성공:', response.data);
-        setAuthToken(accessToken, Number(userId));
+        setAuthToken(accessToken, Number(userId), refreshToken );
         navigate(`/home/${userId}`);  // 닉네임 등록 후 홈으로 이동
       } 
     } catch (error) {

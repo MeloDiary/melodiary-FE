@@ -5,7 +5,7 @@ import { logout as deleteAuthToken } from '../api/auth.api';
 interface AuthContextType {
   isAuthenticated: boolean;
   isSignupComplete: boolean;
-  login: (access_token: string, user_id: number) => void;
+  login: (access_token: string, user_id: number, refresh_token: string) => void;
   logout: () => void;
   completeSignup: () => void;
   setIsSignupComplete: (value: boolean) => void;
@@ -23,15 +23,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     const access_token = localStorage.getItem('access_token');
-    
+    const user_id = localStorage.getItem('user_id');
 
-    if (access_token) {
+    if (access_token && user_id) {
       setIsAuthenticated(true);
+    }else{
+      logout();
     }
   }, []);
 
-  const login = (access_token: string, user_id: number) => {
+  const login = (access_token: string, user_id: number, refresh_token: string) => {
     localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
     localStorage.setItem('user_id', user_id.toString());
     setIsAuthenticated(true);
   };
@@ -42,6 +45,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       deleteAuthToken(user_id);
     }
     localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     localStorage.removeItem('user_id');
     setIsAuthenticated(false);
   };
