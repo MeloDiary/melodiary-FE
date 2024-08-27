@@ -41,9 +41,7 @@ const NickName = () => {
         const response = await registerNickname(userId, nickname);
         console.log('닉네임 등록 성공:', response.data);
         setAuthToken(accessToken, Number(userId), refreshToken );
-        localStorage.setItem("firstVisitAfterNickname", "true");
-
-        navigate(`/home/${userId}`);
+        navigate(`/home/${userId}`);  // 닉네임 등록 후 홈으로 이동
       } 
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 409) {
