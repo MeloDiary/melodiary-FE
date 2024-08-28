@@ -52,16 +52,11 @@ function MatesSidebar() {
               <Nickname>{request.nickname}</Nickname>
               <IconButtons>
                 <AcceptIcon
-                  onClick={() => handleAcceptRequest(request.user_id)}
+                  onClick={() => handleAcceptRequest(request.request_id)}
                 />
                 <RejectIcon
-                  onClick={() => handleRejectRequest(request.user_id)}
+                  onClick={() => handleRejectRequest(request.request_id)}
                 />
-                {/* <Arrow
-                  onClick={() => handleNavigate(request.user_id, request.nickname, request.profile_img_url)}
-                >
-                  <FaLongArrowAltRight />
-                </Arrow> */}
               </IconButtons>
             </FriendItem>
           ))
@@ -99,7 +94,8 @@ function MatesSidebar() {
 }
 
 const MatesSidebarWrapper = styled.div`
-  width: 250px;
+  width: 300px;
+  height: 100vh;
   padding: 40px;
   border-right: 1px solid ${({ theme }) => theme.color.grayDF};
 `;
@@ -121,6 +117,8 @@ const FriendItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  position: relative; 
+  /* padding: 10px; */
 `;
 
 const ProfileImage = styled.img`
@@ -169,10 +167,8 @@ const RejectIcon = styled(IoClose)`
 `;
 
 const Arrow = styled.span`
-  display: flex;
-  justify-content: end;
-  width: 20px;
-  margin-left: 50px;
+  margin-left: auto; 
+  margin-top: 4px;
   cursor: pointer;
   color: ${({ theme }) => theme.color.gray777};
   &:hover {

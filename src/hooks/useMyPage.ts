@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { fetchAllDiaries, fetchUserProfile, fetchCheckNickname, fetchChangeNickname, fetchDeleteAccount } from "../api/mypage.api";
+import { fetchAllDiaries, fetchUserProfile, fetchCheckNickname, fetchChangeNickname, fetchDeleteAccount, fetchMoodGraph } from "../api/mypage.api";
 import { IDiary } from "../models/diary.model";
-import { IUserProfile } from "../models/mypage.model";
+import { IUserProfile, IMoodData, IMood } from "../models/mypage.model";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 export const useMyPage = () => {
   const [userProfile, setUserProfile] = useState<IUserProfile>();
@@ -11,6 +12,8 @@ export const useMyPage = () => {
   const [hasCheckedNickname, setHasCheckedNickname] = useState<boolean>(false); 
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState<boolean | null>(null);
+
+  const [mood, setMood] = useState<IMood | null>(null);
 
   const navigate = useNavigate();
   const storedUserId = localStorage.getItem('user_id');
@@ -79,22 +82,46 @@ export const useMyPage = () => {
     }
   };
 
+  // 기분 그래프
+  const fetchMoodGraphData = async (year: number, month: number) => {
+    try {
+      const moodGraphData: IMood = await fetchMoodGraph(`${year}-${String(month).padStart(2, '0')}`);
+
+      // 날짜별로 moods 정리
+      const groupedMoods: { [key: string]: IMoodData[] } = {}; 
+
+      moodGraphData.moods.forEach((mood: IMoodData) => {
+        const dateKey = dayjs(mood.date).format('YYYY-MM-DD');
+        if (!groupedMoods[dateKey]) {
+          groupedMoods[dateKey] = [];
+        }
+        groupedMoods[dateKey].push(mood);
+      });
+
+      setMood(moodGraphData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (userId !== null) {
       fetchAllDiariesData();
       fetchUserProfileData(userId);
     }
-  }, [userId]);
+  }, []);
 
   return { 
     userProfile, 
     userDiaries, 
     isNicknameAvailable, 
     hasCheckedNickname,
+    mood,
     setHasCheckedNickname,
     fetchCheckNicknameAvailability,
     fetchChangeNicknameData,
     fetchDeleteUserAccount,
+    fetchMoodGraphData,
     isDeleting,
     deleteSuccess
   };

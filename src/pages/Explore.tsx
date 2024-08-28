@@ -43,7 +43,7 @@ const ExploreWrapper = styled.div`
 const DiaryItemWrapper = styled.div`
   margin-bottom: 20px; 
   width: 100%; 
-  max-width: 600px; 
+  max-width: 850px; 
 `;
 
 export default Explore;

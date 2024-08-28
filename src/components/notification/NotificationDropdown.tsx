@@ -17,11 +17,6 @@ const NotificationDropdown = React.forwardRef<
   const navigate = useNavigate();
   const { handleSearch } = useSearchUser();
 
-  const extractNickname = (content: string): string => {
-    const match = content.match(/^(.*?)(?=님이)/);
-    return match ? match[0].trim() : "";
-  };
-
   const handleNotificationClick = async (notification: INotification) => {
     markAsRead(notification.notification_id);
 
@@ -30,17 +25,7 @@ const NotificationDropdown = React.forwardRef<
         navigate(`/diary/${notification.diary_id}`);
         break;
       case "mate": {
-        const nickname = extractNickname(notification.content);
-        console.log(nickname);
-        const result = await handleSearch(nickname);
-        if (result) {
-          navigate(`/home/${result.user_id}`, {
-            // 검색시 홈에서의 정보 확인을 위한 부분입니다! Calander API를 고려해서 주석 처리 해두겠습니다
-            // state: { nickname: result.nickname, profileImgUrl: result.profile_img_url }
-          });
-        } else {
-          console.warn("User not found:", nickname);
-        }
+        navigate(`/mates`);
         break;
       }
       default:

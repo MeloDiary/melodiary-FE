@@ -38,3 +38,10 @@ export const fetchDeleteAccount = async (userId: number) => {
 
   return response.data;
 };
+
+// 기분 그래프 조회 api
+export const fetchMoodGraph = async (date: string) => {
+  const response = await httpClient.get(`/api/diaries/mymoods?month=${date}`);
+
+  return response.data;
+};

@@ -20,6 +20,19 @@ const geolocationOptions = {
   maximumAge: 1000 * 3600 * 24,
 };
 
+export const getPrivacyIcon = (privacyName: string) => {
+  switch (privacyName) {
+    case "public":
+      return <><RiGlobalLine /> 전체 공개</>;
+    case "mate":
+      return <><FiUser /> 친구 공개</>;
+    case "private":
+      return <><FiLock /> 비공개</>;
+    default:
+      return null;
+  }
+};
+
 const WriteDiary = () => {
   const routerLocation = useLocation();
   const diaryToEdit = routerLocation.state?.diary;
@@ -37,7 +50,7 @@ const WriteDiary = () => {
   const [musicArtist, setMusicArtist] = useState<string>("");
   const [musicUrl, setMusicUrl] = useState<string>("");
   const [weatherIcon, setWeatherIcon] = useState<string>("");
-  const [weatherLocation, setWeatherLocation] = useState<string>(""); // 위치
+  const [weatherLocation, setWeatherLocation] = useState<string>("Seoul");
   const [weatherTemp, setWeatherTemp] = useState<number>(0);
 
   // 다이어리 수정 시 초기값
@@ -69,7 +82,9 @@ const WriteDiary = () => {
   } = useUpdateDiary();
 
   // 일기 데이터 작성 및 제출
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     const diaryData: IDiary["body"] = {
       title: title || "",
       content: content || "",
@@ -91,14 +106,27 @@ const WriteDiary = () => {
       background_color: selectedBgColor || "default",
     };
 
-    // await saveDiary(diaryData);
+    // 모든 필드가 작성되었는지 확인하는 함수
+    const isDiaryDataValid = Object.values(diaryData).every((value) => {
+      if (typeof value === 'object' && value !== null) {
+        return Object.values(value).every((v) => v !== "" && v !== null && v !== undefined);
+      }
+      return value !== "" && value !== null && value !== undefined;
+    });
+
     try {
       if (diaryToEdit) {
         // 다이어리 수정의 경우
         await updateDiary(diaryToEdit.id, diaryData);
       } else {
         // 다이어리 저장의 경우
-        await saveDiary(diaryData);
+        if (isDiaryDataValid) {
+          await saveDiary(diaryData);
+          window.alert("일기가 저장되었습니다.");
+          navigate("/home");
+        } else {
+          window.alert("모든 항목을 작성해주세요.");
+        }
       }
     } catch (error) {
       console.error("일기 저장 중 오류 발생:", error);
@@ -136,7 +164,7 @@ const WriteDiary = () => {
           `https://api.melodiary.site/api/weather?latitude=${lat}&longitude=${long}`,
           {
             headers: {
-              Authorization: `Bearer ${process.env.REACT_APP_ACCESS_TOKEN}`,
+              Authorization: `Bearer ${access_token}`,
             },
           }
         )
@@ -154,7 +182,7 @@ const WriteDiary = () => {
           `https://api.melodiary.site/api/weather?latitude=37.564214&longitude=127.001699`,
           {
             headers: {
-              Authorization: `Bearer ${process.env.REACT_APP_ACCESS_TOKEN}`,
+              Authorization: `Bearer ${access_token}`,
             },
           }
         )
@@ -273,31 +301,6 @@ const WriteDiary = () => {
     };
   }, []);
 
-  const getPrivacyIcon = (privacyName: string) => {
-    switch (privacyName) {
-      case "public":
-        return (
-          <>
-            <RiGlobalLine /> 전체 공개
-          </>
-        );
-      case "mate":
-        return (
-          <>
-            <FiUser /> 친구 공개
-          </>
-        );
-      case "private":
-        return (
-          <>
-            <FiLock /> 비공개
-          </>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <WriteDiaryWrapper bgColor={selectedBgColor}>
       {isPreviewOpen && (
@@ -312,9 +315,9 @@ const WriteDiary = () => {
           musicArtist={musicArtist}
           musicUrl={musicUrl}
           formattedDate={formattedDate}
-          location={""}
-          weatherIcon={""}
-          avgTemperature={""}
+          location={weatherLocation} 
+          weatherIcon={weatherIcon} 
+          avgTemperature={weatherTemp} 
           imgUrls={[]}
         />
       )}
@@ -430,7 +433,10 @@ const WriteDiary = () => {
         <Section className="privacy">
           <label>공개범위</label>
           <div className="select-privacy-box" ref={privacyDropdownRef}>
-            <div className="selected-privacy" onClick={tooglePrivacyDropdown}>
+            <div 
+              className="selected-privacy"
+              onClick={tooglePrivacyDropdown}
+            >
               {getPrivacyIcon(selectedPrivacy)}
             </div>
             {isPrivacyDropdown && (

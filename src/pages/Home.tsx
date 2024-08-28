@@ -52,6 +52,10 @@ const Home = () => {
     }
   }, [state?.isExpanded]);
 
+  useEffect(() => {
+    setSelectedDiaryId(null);
+  }, [location.pathname, userId]);
+
   const handleExpand = () => {
     setIsExpanded(!isExpanded);
   };
@@ -97,7 +101,7 @@ const Home = () => {
           }}
           transition={{ duration: 0.5, ease: "linear" }}
         >
-          {diary ? (
+           {diary && selectedDiaryId ? (
             <>
               <DiaryItem
                 diary={diary}
@@ -204,8 +208,7 @@ const RightSection = styled(motion.div)<RightSectionProps>`
   right: 0;
   height: ${({ isExpanded }) => (isExpanded ? "" : "100%")};
   background-color: ${({ theme, background_color }) =>
-    theme.diaryColor[background_color ?? "default"]?.background ||
-    theme.diaryColor.default.background};
+    background_color ? theme.diaryColor[background_color]?.background : theme.color.white};
   z-index: 1;
   box-sizing: border-box;
   overflow: hidden;
@@ -215,10 +218,10 @@ const Message = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; 
-  width: 100%; 
+  height: 100%;
+  width: 100%;
   text-align: center;
-
+  background-color: white;
   p {
     font-size: ${({ theme }) => theme.text.text1};
     color: ${({ theme }) => theme.color.gray777};

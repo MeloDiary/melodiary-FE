@@ -9,23 +9,22 @@ export const fetchComments = async (diary_id: number): Promise<IComment[]> => {
 export const postComment = async (
   diary_id: number,
   content: string,
-  mentioned_user_id: number | null = null
+  mentioned_user_id?: number | null
 ): Promise<IComment> => {
   const response = await httpClient.post(`/api/diaries/${diary_id}/comments`, {
     content,
-    mentioned_user_id:
-      mentioned_user_id !== null ? mentioned_user_id : undefined,
+    mentioned_user_id,
   });
   return response.data;
 };
 
 export const updateComment = async (
   diary_id: number,
-  id: number,
+  comment_id: number,
   content: string
 ): Promise<IComment> => {
   const response = await httpClient.put(
-    `/api/diaries/${diary_id}/comments/${id}`,
+    `/api/diaries/${diary_id}/comments/${comment_id}`,
     { content }
   );
   return response.data;
@@ -33,7 +32,7 @@ export const updateComment = async (
 
 export const deleteComment = async (
   diary_id: number,
-  id: number
+  comment_id: number
 ): Promise<void> => {
-  await httpClient.delete(`/api/diaries/${diary_id}/comments/${id}`);
+  await httpClient.delete(`/api/diaries/${diary_id}/comments/${comment_id}`);
 };

@@ -15,6 +15,7 @@ const DiaryContent: React.FC<DiaryContentProps> = ({
   isExpanded = false,
   isMatesPage = false
 }) => {
+
   const stripHtmlTags = (htmlContent: string) => {
     const div = document.createElement('div');
     div.innerHTML = htmlContent;
@@ -28,17 +29,25 @@ const DiaryContent: React.FC<DiaryContentProps> = ({
     return img ? img.src : null;
   };
 
-  const getSummaryText = (text: string, maxLength: number) => {
-    if (text.length <= maxLength) return text;
-    return text.slice(0, maxLength) + " ...";
+  const getSummaryHtml = (htmlContent: string, maxLength: number) => {
+    const div = document.createElement('div');
+    div.innerHTML = htmlContent;
+
+    const textContent = div.textContent || div.innerText || "";
+    if (textContent.length <= maxLength) return htmlContent;
+
+    const truncatedText = textContent.slice(0, maxLength) + " ...";
+    div.innerHTML = div.innerHTML.replace(textContent, truncatedText);
+
+    return div.innerHTML;
   };
 
   const tagColor: string = diary.body.background_color || "default";
 
   const firstImageUrl = extractFirstImage(diary.body.content);
 
-  const summaryText = isSummary && isMatesPage
-    ? getSummaryText(stripHtmlTags(diary.body.content), 200)
+  const summaryHtml = isSummary && isMatesPage
+    ? getSummaryHtml(stripHtmlTags(diary.body.content), 200)
     : stripHtmlTags(diary.body.content);
 
   return (
@@ -84,7 +93,7 @@ const DiaryContent: React.FC<DiaryContentProps> = ({
       <DiaryText isExpanded={isExpanded} isSummary={isSummary} isMatesPage={isMatesPage}>
         <div
           dangerouslySetInnerHTML={{
-            __html: isSummary ? summaryText : diary.body.content,
+            __html: isSummary ? summaryHtml : diary.body.content,
           }}
         />
       </DiaryText>

@@ -16,7 +16,7 @@ interface Props {
   formattedDate: string;
   location: string;
   weatherIcon: string;
-  avgTemperature: string;
+  avgTemperature: number;
   imgUrls: string[];
 }
 
@@ -56,7 +56,7 @@ const DiaryPreview = ({
       weather: {
         icon: weatherIcon,
         location,
-        avg_temperature: Number(avgTemperature),
+        avg_temperature: avgTemperature,
       },
       background_color: selectedBgColor,
     },

@@ -4,11 +4,12 @@ import {
   fetchMatesList,
   acceptMateRequest,
   rejectMateRequest,
+  deleteMate,
 } from "../api/mates.api";
-import { IMate } from "../models/user.model";
+import { IMate, IRequestMate } from "../models/user.model";
 
 export const useReceivedMateRequests = (user_id: number) => {
-  const [receivedRequests, setReceivedRequests] = useState<IMate[]>([]);
+  const [receivedRequests, setReceivedRequests] = useState<IRequestMate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -56,9 +57,8 @@ export const useMatesList = (user_id: number) => {
     loading,
   };
 };
-// 친구 요청 수락 훅
 export const useAcceptMateRequest = (user_id: number) => {
-  const [receivedRequests, setReceivedRequests] = useState<IMate[]>([]);
+  const [receivedRequests, setReceivedRequests] = useState<IRequestMate[]>([]);
 
   const handleAcceptRequest = async (requestID: number) => {
     try {
@@ -66,6 +66,7 @@ export const useAcceptMateRequest = (user_id: number) => {
       setReceivedRequests((prev) =>
         prev.filter((request) => request.user_id !== requestID)
       );
+      window.location.reload();
     } catch (error) {
       console.error("친구 요청을 수락하는 중 오류가 발생했습니다.", error);
     }
@@ -77,9 +78,8 @@ export const useAcceptMateRequest = (user_id: number) => {
   };
 };
 
-// 친구 요청 거절 훅
 export const useRejectMateRequest = (user_id: number) => {
-  const [receivedRequests, setReceivedRequests] = useState<IMate[]>([]);
+  const [receivedRequests, setReceivedRequests] = useState<IRequestMate[]>([]);
 
   const handleRejectRequest = async (requestID: number) => {
     try {
@@ -87,6 +87,7 @@ export const useRejectMateRequest = (user_id: number) => {
       setReceivedRequests((prev) =>
         prev.filter((request) => request.user_id !== requestID)
       );
+      window.location.reload();
     } catch (error) {
       console.error("친구 요청을 거절하는 중 오류가 발생했습니다.", error);
     }
@@ -97,3 +98,34 @@ export const useRejectMateRequest = (user_id: number) => {
     setReceivedRequests,
   };
 };
+
+// useDeleteMate.tsx
+export const useDeleteMate = (user_id: number, updateMatesList: () => void) => {
+  const [mates, setMates] = useState<IMate[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const handleDeleteMate = async (mate_id: number) => {
+    setLoading(true);
+    try {
+      await deleteMate(user_id, mate_id);
+      setMates((prevMates) => prevMates.filter((mate) => mate.user_id !== mate_id));
+      updateMatesList(); // 친구 삭제 후, 목록을 다시 불러옵니다.
+    } catch (err) {
+      setError(err as Error);
+      console.error("친구를 삭제하는 중 오류가 발생했습니다.", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    mates, 
+    setMates, 
+    loading,
+    error,
+    handleDeleteMate,
+  };
+};
+
+
