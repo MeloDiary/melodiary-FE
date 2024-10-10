@@ -86,8 +86,10 @@ const MyPage = () => {
         if (uploadedImageUrls.length > 0) {
           if (isBackground) {
             saveBackgroundImage(uploadedImageUrls[0]);
+            window.location.reload();
           } else {
             saveProfileImage(uploadedImageUrls[0]);
+            window.location.reload();
           }
         }
       } catch (error) {
