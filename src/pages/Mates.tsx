@@ -4,7 +4,7 @@ import DiaryItem from "../components/diary/DiaryItem";
 import MatesSidebar from "../components/sidebar/MatesSidebar";
 import { useMatesData } from "../hooks/useMatesData";
 
-function Mates() {
+const Mates = () => {
   const userId = localStorage.getItem("user_id");
   const numericUserId = userId ? parseInt(userId, 10) : 0;
   const { diaries, loading, error, setDiaries, setPage, hasMore } = useMatesData(numericUserId);
@@ -55,7 +55,9 @@ function Mates() {
       </MatesFeed>
     </MatesWrapper>
   );
-}
+};
+
+export default Mates;
 
 const LoadingMessage = styled.div`
   display: flex;
@@ -112,5 +114,3 @@ const DiaryItemWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
-
-export default Mates;

@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import DiaryContent from "./DiaryContent";
-import profile from "../../assets/images/mypage/mypage-bg.jpg";
 import MusicBar from "../musicbar/MusicBar";
 import { useMyPage } from "../../hooks/useMyPage";
 import { IDiary } from "../../models/diary.model";
 import { getPrivacyIcon } from "../../pages/WriteDiary";
+import { DefaultProfileIcon } from "../header/Header";
 
 interface Props {
   title: string;
@@ -52,11 +52,11 @@ const DiaryPreview = ({
     like_count: 0,
     created_at: formattedDate || null,
     body: {
-      title: title || "", // title이 없을 때 빈 문자열을 기본값으로 설정
-      content: content || "", // content가 없을 때 빈 문자열을 기본값으로 설정
-      img_urls: imgUrls || null, // imgUrls이 없을 때 null로 설정
+      title: title || "제목을 입력하세요",
+      content: content || "일기를 작성해주세요",
+      img_urls: imgUrls || null,
       mood: selectedMood || null,
-      emoji: selectedEmoji || null,
+      emoji: selectedEmoji || "-",
       privacy: selectedPrivacy === "private" || selectedPrivacy === "public" || selectedPrivacy === "mate" ? selectedPrivacy : "private",
       music: {
         title: musicTitle,
@@ -80,8 +80,15 @@ const DiaryPreview = ({
         <Header>
           <div className="date">{formattedDate}</div>
           <ProfileWrapper>
-            <div className="profile"></div>
-            <span>{userProfile?.nickname}</span> {/* 실제 사용자 이름으로 변경 */}
+            {userProfile?.profile_img_url ? (
+              <img 
+                className="profile" 
+                src={userProfile?.profile_img_url ?? ""} 
+              />
+            ) : (
+              <DefaultProfileIcon size={32} />
+            )}
+            <span>{userProfile?.nickname}</span>
           </ProfileWrapper>
         </Header>
         <Title>{title}</Title>
@@ -103,7 +110,6 @@ const DiaryPreview = ({
 
 export default DiaryPreview;
 
-// 스타일 컴포넌트
 const DiaryPreviewWrapper = styled.div`
   position: absolute;
   top: 50%;
@@ -171,15 +177,11 @@ const ProfileWrapper = styled.div`
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    margin-right: 10px;
-    background-image: url(${profile});
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
   }
 
   span {
     font-size: ${({ theme }) => theme.text.text2};
     font-weight: 400;
+    margin-left: 6px;
   }
 `;

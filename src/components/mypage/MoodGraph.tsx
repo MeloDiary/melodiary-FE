@@ -146,6 +146,8 @@ const MoodGraph = () => {
   );
 };
 
+export default MoodGraph;
+
 const MoodGraphWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -181,5 +183,3 @@ const MoodGraphContent = styled.div`
   width: 100%;
   height: 100%;
 `;
-
-export default MoodGraph;

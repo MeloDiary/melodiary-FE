@@ -7,11 +7,11 @@ export const getLikes = async (diaryId: number): Promise<ILikedUser[]> => {
 };
 
 export const postLike = async (diaryId: number, userId: number) => {
-    const response = await httpClient.post(`/api/diaries/${diaryId}/like`, { userId });
-    return response.data;
-  };
+  const response = await httpClient.post(`/api/diaries/${diaryId}/like`, { userId });
+  return response.data;
+};
   
-  export const deleteLike = async (diaryId: number, userId: number) => {
-    const response = await httpClient.delete(`/api/diaries/${diaryId}/like`, { data: { userId } });
-    return response.data;
-  };
+export const deleteLike = async (diaryId: number, userId: number) => {
+  const response = await httpClient.delete(`/api/diaries/${diaryId}/like`, { data: { userId } });
+  return response.data;
+};

@@ -34,7 +34,6 @@ export const useReceivedMateRequests = (user_id: number) => {
   };
 };
 
-
 export const useMatesList = (user_id: number) => {
   const [mates, setMates] = useState<IMate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -104,7 +103,6 @@ export const useRejectMateRequest = (user_id: number) => {
   };
 };
 
-// useDeleteMate.tsx
 export const useDeleteMate = (user_id: number, updateMatesList: () => void) => {
   const [mates, setMates] = useState<IMate[]>([]);
   const [loading, setLoading] = useState<boolean>(false);

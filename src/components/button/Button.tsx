@@ -16,6 +16,8 @@ const Button = ({ children, size, schema, ...props }: Props) => {
   );
 };
 
+export default Button;
+
 const ButtonWrapper = styled.button<Omit<Props, "children">>`
   display: flex;
   align-items: center;
@@ -44,5 +46,3 @@ const ButtonWrapper = styled.button<Omit<Props, "children">>`
     margin-right: 8px;
   }
 `;
-
-export default Button;

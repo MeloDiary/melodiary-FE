@@ -108,7 +108,6 @@ const DiaryHeader: React.FC<DiaryItemProps> = ({
               </DiaryDate>
             </>
           )}
-
           {!isSummary && (
             <Right>
               <DiaryTitle isSummary={isSummary}>{diary.body.title}</DiaryTitle>

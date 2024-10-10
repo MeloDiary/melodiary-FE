@@ -213,6 +213,8 @@ const MusicBar = ({ youtubeUrl, title, artist, isExpanded }: MusicBarProps) => {
   );
 };
 
+export default MusicBar;
+
 const MusicBarContainer = styled(motion.div)<{ isExpanded: boolean }>`
   position: fixed;
   bottom: 0;
@@ -393,5 +395,3 @@ const VolumeControl = styled.div<{
     cursor: pointer;
   }
 `;
-
-export default MusicBar;

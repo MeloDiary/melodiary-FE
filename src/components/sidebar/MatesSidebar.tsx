@@ -11,7 +11,7 @@ import {
   useMatesList,
 } from "../../hooks/useMates";
 
-function MatesSidebar() {
+const MatesSidebar = () => {
   const user_id = Number(localStorage.getItem("user_id"));
   const navigate = useNavigate();
 
@@ -91,7 +91,9 @@ function MatesSidebar() {
       </Section>
     </MatesSidebarWrapper>
   );
-}
+};
+
+export default MatesSidebar;
 
 const MatesSidebarWrapper = styled.div`
   width: 300px;
@@ -117,8 +119,7 @@ const FriendItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 20px;
-  position: relative; 
-  /* padding: 10px; */
+  position: relative;
 `;
 
 const ProfileImage = styled.img`
@@ -151,6 +152,7 @@ const AcceptIcon = styled(FaCheck)`
   height: 18px;
   cursor: pointer;
   color: ${({ theme }) => theme.color.gray777};
+
   &:hover {
     color: ${({ theme }) => theme.color.grayblack};
   }
@@ -161,6 +163,7 @@ const RejectIcon = styled(IoClose)`
   height: 20px;
   cursor: pointer;
   color: ${({ theme }) => theme.color.gray777};
+
   &:hover {
     color: ${({ theme }) => theme.color.grayblack};
   }
@@ -171,9 +174,8 @@ const Arrow = styled.span`
   margin-top: 4px;
   cursor: pointer;
   color: ${({ theme }) => theme.color.gray777};
+
   &:hover {
     color: ${({ theme }) => theme.color.grayblack};
   }
 `;
-
-export default MatesSidebar;

@@ -37,6 +37,7 @@ const WriteDiary = () => {
   const diaryToEdit = routerLocation.state?.diary;
   const navigate = useNavigate();
   const user_id = localStorage.getItem('user_id');
+
   const { saveDiary, loading } = useDiaries();
   const { updateDiary, error: updateError } = useUpdateDiary();
 
@@ -83,7 +84,7 @@ const WriteDiary = () => {
     const diaryData: IDiary["body"] = {
       title: title || "",
       content: content || "",
-      img_urls: [], // 예시로 비워둠. 이미지 URL을 관리할 필요가 있음
+      img_urls: [],
       mood: selectedMood || "😍",
       emoji: selectedEmoji || "",
       privacy:
@@ -152,6 +153,7 @@ const WriteDiary = () => {
           await saveDiary(diaryData);
           window.alert("일기가 저장되었습니다.");
           navigate(`/home/${user_id}`);
+          console.log()
         } else {
           window.alert("모든 항목을 작성해주세요.");
         }
@@ -173,9 +175,7 @@ const WriteDiary = () => {
   ];
   const today = new Date();
   const todayDay = week[today.getDay()];
-  const formattedDate = `${today.getFullYear()}년 ${
-    today.getMonth() + 1
-  }월 ${today.getDate()}일 ${todayDay}`;
+  const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일 ${todayDay}`;
 
   // 날씨
   const { location, error } = useGeoLocation(geolocationOptions);
@@ -183,6 +183,7 @@ const WriteDiary = () => {
   let long = location?.longitude;
 
   const access_token = localStorage.getItem("access_token");
+
   useEffect(() => {
     //수정일 경우 호출 X
     if (!diaryToEdit) {
@@ -244,15 +245,19 @@ const WriteDiary = () => {
   const toogleEmojiDropdown = () => {
     setIsEmojiDropdown(!isEmojiDropdown);
   };
+
   const toogleBgColorDropdown = () => {
     setIsBgColorDropdown(!isBgColorDropdown);
   };
+
   const toogleMoodDropdown = () => {
     setIsMoodDropdown(!isMoodDropdown);
   };
+
   const tooglePrivacyDropdown = () => {
     setIsPrivacyDropdown(!isPrivacyDropdown);
   };
+
   const tooglePreviewOpen = () => {
     setIsPreviewOpen(!isPreviewOpen);
   };
@@ -262,10 +267,12 @@ const WriteDiary = () => {
     setSelectedBgColor(option);
     setIsBgColorDropdown(false);
   };
+
   const selectMoodOption = (option: string) => {
     setSelectedMood(option);
     setIsMoodDropdown(false);
   };
+
   const selectPrivacyOption = (option: string) => {
     setSelectedPrivacy(option);
     setIsPrivacyDropdown(false);
@@ -280,6 +287,7 @@ const WriteDiary = () => {
       setIsEmojiDropdown(false);
     }
   };
+
   const handleClickBgColorOutside = (e: MouseEvent) => {
     if (
       bgColorDropdownRef.current &&
@@ -288,6 +296,7 @@ const WriteDiary = () => {
       setIsBgColorDropdown(false);
     }
   };
+
   const handleClickMoodOutside = (e: MouseEvent) => {
     if (
       moodDropdownRef.current &&
@@ -296,6 +305,7 @@ const WriteDiary = () => {
       setIsMoodDropdown(false);
     }
   };
+
   const handleClickPrivacyOutside = (e: MouseEvent) => {
     if (
       privacyDropdownRef.current &&
@@ -304,6 +314,7 @@ const WriteDiary = () => {
       setIsPrivacyDropdown(false);
     }
   };
+  
   const handleClickPreivewOutside = (e: MouseEvent) => {
     if (
       previewOpenRef.current &&
@@ -584,6 +595,7 @@ const IconBg = styled.div`
       transition: all 0.15s ease-in-out;
     }
   }
+
   /* 오늘의 이모지 */
   .icon {
     position: relative;
@@ -719,7 +731,8 @@ const Section = styled.div`
       }
     }
   }
-  // 날씨 정보
+
+  /* 날씨 정보 */
   .weather-info {
     display: flex;
     flex-direction: row;

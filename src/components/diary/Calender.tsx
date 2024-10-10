@@ -5,6 +5,7 @@ import future from '../../assets/icons/rectangle2.png';
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { getCalender } from "../../api/home.api";
 import { useParams } from 'react-router-dom';
+
 interface Emojis {
   [key: number]: string | JSX.Element;
 }
@@ -201,6 +202,7 @@ const Dropdown = styled.div`
   align-items: center;
   font-size: ${({ theme }) => theme.text.text3};
   cursor: pointer;
+
   span {
     padding: 5px 5px;
     padding-right: 0px;
@@ -243,6 +245,7 @@ const SelectorHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+
   button {
     background: none;
     border: none;
@@ -264,9 +267,11 @@ const MonthButton = styled.button`
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+
   &:hover {
     background-color: ${({ theme }) => theme.color.grayDF};
   }
+
   &.active {
     background-color: ${({ theme }) => theme.color.lightblue};
   }
@@ -281,11 +286,13 @@ const Table = styled.table`
   border-spacing: 0;
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.color.grayDF};
+
   th, td {
     padding-top: 5px;
     border: none;
     text-align: center;
   }
+
   th {
     padding: 10px 0 15px;
     background-color: transparent;

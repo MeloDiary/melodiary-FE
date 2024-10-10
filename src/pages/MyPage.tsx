@@ -9,6 +9,7 @@ import Settings from '../components/mypage/Settings';
 import { useMyPage } from '../hooks/useMyPage';
 import { saveBackgroundImage, saveProfileImage, uploadProfileImage } from '../api/uploadProfileImage';
 import { FaUserCircle } from "react-icons/fa";
+
 const MyPage = () => {
   const tabs = [
     { 
@@ -37,7 +38,6 @@ const MyPage = () => {
   const { userProfile, error } = useMyPage();
   const [selectedImage, setSelectedImage] = useState(userProfile?.profile_img_url);
   const [selectedBackground, setSelectedBackground] = useState(userProfile?.profile_background_img_url);
-  console.log(userProfile);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const backgroundInputRef = useRef<HTMLInputElement>(null);
 
@@ -65,8 +65,12 @@ const MyPage = () => {
     }
   }, [userProfile]);
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>, isBackground: boolean = false) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>, 
+    isBackground: boolean = false
+  ) => {
     const file = event.target.files?.[0];
+
     if (file && userProfile) {
       try {
         const reader = new FileReader();
@@ -350,7 +354,6 @@ const ProfileImg = styled.div`
     }
   }
 `;
-
 
 const UserFeed = styled.div`
   display: flex;

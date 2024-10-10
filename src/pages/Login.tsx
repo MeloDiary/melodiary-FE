@@ -8,9 +8,11 @@ import { GOOGLE_LOGIN_URL, KAKAO_LOGIN_URL, NAVER_LOGIN_URL, FACEBOOK_LOGIN_URL 
 import { FaFacebook } from "react-icons/fa"; 
 import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
+
 const Login = () => {
   const {isAuthenticated} = useAuth();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (isAuthenticated) {
       const userId =  localStorage.getItem('user_id');
@@ -48,6 +50,8 @@ const Login = () => {
   )
 };
 
+export default Login;
+
 const LoginWrapper = styled.div`
   height: 100vh;
   background-image: url(${ background});
@@ -56,6 +60,7 @@ const LoginWrapper = styled.div`
   background-position: center;
   background-attachment: fixed;   
 `;
+
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -64,6 +69,7 @@ const ContentWrapper = styled.div`
   height:92vh;
   padding-left: 5%;
 `;
+
 const LoginTitle = styled.h1`
   margin-bottom: 0.5rem;
   text-align: center;
@@ -91,6 +97,7 @@ const Button = styled.button`
   font-weight: 600;
   transition: background-color 0.3s;
   cursor: pointer;
+
   &.google {
     background-color: ${({ theme }) => theme.color.white};
     color: ${({ theme }) => theme.color.black};
@@ -138,5 +145,3 @@ const LoginLink = styled.div`
     text-decoration: underline;
   }
 `;
-
-export default Login;

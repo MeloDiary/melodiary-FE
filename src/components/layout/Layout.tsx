@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import Header from '../header/Header';
 import Sidebar from '../sidebar/Sidebar';
-import { useState } from 'react';
 import BeforeLoginHeader from '../header/BeforeLoginHeader';
 import { useAuth } from '../../context/AuthContext';
 import { useLocation } from 'react-router-dom';
@@ -54,7 +53,6 @@ const MainLayout = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  /* align-items: flex-start; */
   width: 100%;
   /* height: calc(100vh - 64px); */
   height: 100%;

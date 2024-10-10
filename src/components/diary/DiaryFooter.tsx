@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import { DiaryItemProps, DiarySummaryProps } from "./DiaryItem";
 import { useLikeStatus } from "../../hooks/useLikeStatus";
-import { fetchComments } from "../../api/comment.api"; // 댓글을 가져오는 API
+import { fetchComments } from "../../api/comment.api";
 
 interface DiaryFooterProps extends DiaryItemProps {
   background_color: string;

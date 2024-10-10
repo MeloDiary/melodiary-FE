@@ -5,10 +5,11 @@ import { useEffect, useCallback } from 'react';
 
 const AllDiaries = () => {
   const { fetchAllDiariesData, userDiaries, page, setPage, more } = useMyPage();
+  console.log(userDiaries);
 
   const handleScroll = useCallback(() => {
     // 현재 스크롤 위치 + 화면 높이 >= 전체 문서 높이
-    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight && more) {
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300 && more) {
       setPage((prevPage) => prevPage + 1);
     }
   }, [more, setPage]);

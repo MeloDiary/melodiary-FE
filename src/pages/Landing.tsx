@@ -4,18 +4,22 @@ import { motion} from 'framer-motion';
 import background from '../assets/images/background.png';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+
 const Landing = () => {
-  const {isAuthenticated, logout} = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
   const openJoinPage = () => {
     navigate('/join');
   };
+
   useEffect(() => {
     if (isAuthenticated) {
       const userId =  localStorage.getItem('user_id');
       navigate(`/home/${userId}`);
     }
   }, [isAuthenticated, navigate]);
+
   return(
     <LandingWrapper>
       <LandingContainer>
@@ -36,6 +40,7 @@ const Landing = () => {
 };
 
 export default Landing;
+
 const LandingWrapper = styled(motion.div)`
   height: 100vh;
   background-image: url(${ background });
@@ -53,11 +58,13 @@ const LandingContainer = styled.main`
   height:92vh;
   padding-left: 5%; 
   color: #000;
+
   h1 {
     margin-bottom: 20px;
     font-size: 64px;
     font-weight: 600;
   }
+
   p {
     margin-bottom: 1em;
     text-align: left;
@@ -66,6 +73,7 @@ const LandingContainer = styled.main`
     line-height: 170%;
     color: ${({ theme }) => theme.color.gray777};
   }
+
   button {
     padding: 10px 20px;
     border: none;
@@ -75,8 +83,8 @@ const LandingContainer = styled.main`
     color: ${({ theme }) => theme.color.white};
     cursor: pointer;
   }
-    
-`
+`;
+
 const TextContainer = styled.div`
   text-align: left; 
 `;
@@ -84,17 +92,19 @@ const TextContainer = styled.div`
 const Highlight = styled.span`
   display: inline-block;
   position: relative;
+
   span {
     padding-left: 0.5rem;
     position: relative;
     z-index: 1;
   }
+
   &::before {
-    content: '';
     position: absolute;
-    z-index: 0;
+    content: '';
     left: 0;
     top: 50%;
+    z-index: 0;
     width: 90%;
     height: 2.5rem; 
     margin-top: 1.2rem;
