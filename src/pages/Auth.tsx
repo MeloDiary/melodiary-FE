@@ -59,10 +59,18 @@ const Auth = () => {
         }else{
           const { type, action } = JSON.parse(stateParam);
           setAction(action);
-          authData = {
-            service_provider: type,
-            authorization_code: code,
-          };
+          if(type === "kakao"){
+            authData = {
+              service_provider: type,
+              authorization_code: code,
+              state: stateParam,
+            };
+          }else{
+            authData = {
+              service_provider: type,
+              authorization_code: code,
+            };
+          }
           console.log(authData);
         }
         

@@ -41,12 +41,6 @@ const Login = () => {
               Naver로 시작하기
             </Button>
           </a>
-          <a href={FACEBOOK_LOGIN_URL}>
-            <Button className="facebook">
-              <IconWrapper><FaFacebook /></IconWrapper> 
-              Facebook으로 시작하기
-            </Button>
-          </a>
           <LoginLink >아직 계정이 없으신가요? <Link to='/join' className='loginBtn'>회원가입</Link></LoginLink>
         </ButtonContainer>
       </ContentWrapper>
