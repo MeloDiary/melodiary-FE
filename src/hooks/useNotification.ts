@@ -9,13 +9,17 @@ export const useNotifications = (userID: number) => {
   const fetchNotifications = async () => {
     try {
       const data = await fetchUnreadNotifications(userID);
-      setNotifications(data);
+      const sortedData = data.sort((a: INotification, b: INotification) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
+      setNotifications(sortedData);
     } catch (error) {
       console.error("Failed to fetch notifications", error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchNotifications();
