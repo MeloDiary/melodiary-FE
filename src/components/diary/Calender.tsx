@@ -30,11 +30,7 @@ const Calendar = ({ onFetchData, onEmojiClick }: CalenderProps) => {
       try {
         if (userId) {
           let response;
-          if (month < 10) {
-            response = await getCalender(userId, `${year}-0${month + 1}`);
-          } else {
-            response = await getCalender(userId, `${year}-${month + 1}`);
-          }
+          response = await getCalender(userId, `${year}-${String(month + 1).padStart(2, '0')}`);
 
           onFetchData(response.data);
 

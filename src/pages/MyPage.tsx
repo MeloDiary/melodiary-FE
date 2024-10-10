@@ -34,13 +34,18 @@ const MyPage = () => {
   ];
 
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
-  const { userProfile } = useMyPage();
+  const { userProfile, error } = useMyPage();
   const [selectedImage, setSelectedImage] = useState(userProfile?.profile_img_url);
   const [selectedBackground, setSelectedBackground] = useState(userProfile?.profile_background_img_url);
   console.log(userProfile);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const backgroundInputRef = useRef<HTMLInputElement>(null);
 
+
+  if (error) {
+    throw new Error("네트워크 오류 발생: " + error.message);
+  }
+  
   const handleCameraClick = () => {
     fileInputRef.current!.click();
   };

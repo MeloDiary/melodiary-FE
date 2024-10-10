@@ -7,13 +7,13 @@ export const useDiaries = () => {
   const [diaryBody, setDiaryBody] = useState<IDiary["body"] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [wirteDiaryErr, setWriteDiaryErr] = useState<string | null>(null);
+
   // 작성한 일기 저장
   const saveDiary = async (data: IDiary["body"]) => {
     setLoading(true);
     try {
       await fetchWriteDiary(data);
       setDiaryBody(data);
-      console.log(data);
     } catch (err) {
       setWriteDiaryErr("일기 저장에 실패했습니다.");
     } finally {
@@ -21,12 +21,7 @@ export const useDiaries = () => {
     }
   };
   
-  return {
-    diaryBody,
-    saveDiary,
-    loading,
-    wirteDiaryErr,
-  };
+  return { diaryBody, loading, wirteDiaryErr, saveDiary };
 };
 
 export const useDiary = (diaryId: number) => {
@@ -41,7 +36,6 @@ export const useDiary = (diaryId: number) => {
         setDiary(diaryData);
       } catch (error) {
         console.error('Failed to fetch diary', error);
-        setError(error as Error);
       } finally {
         setLoading(false);
       }

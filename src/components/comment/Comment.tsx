@@ -76,7 +76,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           setCommentCount(latestComments.length);
         }
       }
-    }, 5000);
+    }, 50000);
 
     return () => clearInterval(intervalId);
   }, [comments.length, diaryId, setCommentCount]);
@@ -219,6 +219,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 const CommentsContainer = styled.div`
   background-color: none;
   border-top: 1px solid ${({ theme }) => theme.color.grayDF};
+  min-height: 400px;
 `;
 
 const Comment = styled.div`

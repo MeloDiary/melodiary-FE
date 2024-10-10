@@ -6,12 +6,17 @@ export const useExploreData = () => {
   const [diaries, setDiaries] = useState<IDiary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const diaries = await fetchExploreDiaries();
-        setDiaries(diaries);
+        const newDiaries = await fetchExploreDiaries(page);
+        setDiaries(prevDiaries => [...prevDiaries, ...newDiaries]);
+        if (newDiaries.length === 0) {
+          setHasMore(false);
+        }
       } catch (err) {
         setError(err as Error);
       } finally {
@@ -20,7 +25,7 @@ export const useExploreData = () => {
     };
 
     fetchData();
-  }, []);
+  }, [page]);
 
-  return { diaries, loading, error, setDiaries };
+  return { diaries, loading, error, setDiaries, setPage, hasMore };
 };

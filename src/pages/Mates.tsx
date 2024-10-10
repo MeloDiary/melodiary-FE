@@ -1,33 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import DiaryItem from "../components/diary/DiaryItem";
 import MatesSidebar from "../components/sidebar/MatesSidebar";
 import { useMatesData } from "../hooks/useMatesData";
-import { IDiary } from "../models/diary.model";
-import { useDeleteMate } from "../hooks/useMates";
 
 function Mates() {
   const userId = localStorage.getItem("user_id");
-  const numericUserId = userId ? parseInt(userId, 10) : 0; // undefined일 경우 0으로 설정
+  const numericUserId = userId ? parseInt(userId, 10) : 0;
+  const { diaries, loading, error, setDiaries, setPage, hasMore } = useMatesData(numericUserId);
 
-  const { diaries, loading, error, setDiaries } = useMatesData(numericUserId);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500 && hasMore && !loading) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
 
-  const { handleDeleteMate } = useDeleteMate(numericUserId, () => {
-    setDiaries((prevDiaries) => prevDiaries.filter(diary => diary.user_profile.user_id !== numericUserId));
-  });
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [hasMore, loading]);
 
   if (numericUserId === 0) {
     return <div>Error: No valid user ID found. Please log in.</div>;
   }
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (loading && diaries.length === 0) {
+    return (
+      <LoadingMessage>
+        <Spinner />
+        <LoadingText>Loading...</LoadingText>
+      </LoadingMessage>
+    );
   }
-
+  
   if (error) {
-    return <div>Error: {error.message}</div>;
+    throw new Error("네트워크 오류 발생: " + error.message);
   }
-
+  
   return (
     <MatesWrapper>
       <MatesSidebar />
@@ -42,32 +51,66 @@ function Mates() {
             />
           </DiaryItemWrapper>
         ))}
+        {loading && <Spinner />}
       </MatesFeed>
     </MatesWrapper>
   );
 }
 
+const LoadingMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+`;
+
+const LoadingText = styled.div`
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
+`;
+
+const Spinner = styled.div`
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #000;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
 
 const MatesWrapper = styled.div`
   display: flex;
-  flex-direction: row;
-  margin-bottom: 30px;
 `;
 
 const MatesFeed = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center; 
-  justify-content: flex-start; 
-  width: 100%; 
-  padding: 20px;
+  justify-content: center;
+  padding: 50px;
   margin-bottom: 30px;
+  width: 100%; 
 `;
 
 const DiaryItemWrapper = styled.div`
   margin-bottom: 20px; 
-  width: 100%; 
-  max-width: 800px;
+  width: 100%;
+  max-width: 850px;
+  box-sizing: border-box; 
+  display: flex;
+  justify-content: center;
 `;
 
 export default Mates;

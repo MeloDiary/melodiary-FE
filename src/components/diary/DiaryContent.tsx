@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import Slider from "react-slick";
 import { IDiary } from "../../models/diary.model";
 
 interface DiaryContentProps {
@@ -13,24 +14,25 @@ const DiaryContent: React.FC<DiaryContentProps> = ({
   diary,
   isSummary = false,
   isExpanded = false,
-  isMatesPage = false
+  isMatesPage = false,
 }) => {
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   const stripHtmlTags = (htmlContent: string) => {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.innerHTML = htmlContent;
     return div.textContent || div.innerText || "";
   };
 
-  const extractFirstImage = (htmlContent: string): string | null => {
-    const div = document.createElement('div');
+  const extractAllImages = (htmlContent: string): string[] => {
+    const div = document.createElement("div");
     div.innerHTML = htmlContent;
-    const img = div.querySelector('img');
-    return img ? img.src : null;
+    const images = div.querySelectorAll("img");
+    return Array.from(images).map((img) => img.src);
   };
 
   const getSummaryHtml = (htmlContent: string, maxLength: number) => {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.innerHTML = htmlContent;
 
     const textContent = div.textContent || div.innerText || "";
@@ -44,16 +46,49 @@ const DiaryContent: React.FC<DiaryContentProps> = ({
 
   const tagColor: string = diary.body.background_color || "default";
 
-  const firstImageUrl = extractFirstImage(diary.body.content);
+  const imageUrls = extractAllImages(diary.body.content);
 
   const summaryHtml = isSummary && isMatesPage
     ? getSummaryHtml(stripHtmlTags(diary.body.content), 200)
     : stripHtmlTags(diary.body.content);
 
+  const sliderSettings = {
+    dots: imageUrls.length > 1, 
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    customPaging: (i: number) => (
+      <DotWrapper onClick={(e) => e.stopPropagation()}>
+        <Dot active={i === currentSlideIndex} />
+      </DotWrapper>
+    ),
+    dotsClass: "slick-dots custom-dots",
+    adaptiveHeight: true,
+    centerMode: false, 
+    centerPadding: '0px', 
+    beforeChange: (current: number, next: number) => {
+      setCurrentSlideIndex(next); 
+    },
+  };
+
   return (
     <ContentContainer isSummary={isSummary} isMatesPage={isMatesPage}>
-      {isSummary && firstImageUrl && (
-        <SummaryImage src={firstImageUrl} alt={diary.body.title} />
+      {isSummary && imageUrls.length > 0 && (
+        <SliderContainer>
+          {imageUrls.length > 1 ? (
+            <Slider {...sliderSettings}>
+              {imageUrls.map((url, index) => (
+                <SlideImageWrapper key={index}>
+                  <SummaryImage src={url} alt={`Diary Image ${index + 1}`} />
+                </SlideImageWrapper>
+              ))}
+            </Slider>
+          ) : (
+            <SummaryImage src={imageUrls[0]} alt="Diary Image" />
+          )}
+        </SliderContainer>
       )}
       <Title>
         {isSummary && (
@@ -109,6 +144,7 @@ const ContentContainer = styled.div<{ isSummary: boolean; isMatesPage: boolean }
   justify-content: center;
   width: 100%;
   padding: ${({ isSummary, isMatesPage }) => (isSummary || isMatesPage ? "0 5%" : "0 10%")};
+  overflow: hidden;
 `;
 
 const Title = styled.div`
@@ -166,7 +202,100 @@ const DiaryText = styled.div<{ isExpanded: boolean; isSummary: boolean; isMatesP
 
 const SummaryImage = styled.img`
   width: 100%;
-  max-height: 450px;
+  height: 450px; 
   object-fit: cover;
+`;
+
+const SlideImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;  
+  width: 100%;  
+`;
+
+const SliderContainer = styled.div`
+  width: 100%;  
   margin-bottom: 20px;
+  
+  .slick-list {
+    overflow: hidden;  
+  }
+
+  .slick-slide {
+    opacity: 0; 
+    transition: opacity 0.5s ease;
+  }
+
+  .slick-active {
+    opacity: 1;  
+  }
+
+  .slick-slider {
+    max-width: 100%; 
+  }
+
+  .slick-track {
+    display: flex;
+    align-items: center;  
+  }
+
+  .slick-slide img {
+    width: 100%;  
+    height: 450px;  
+    object-fit: cover;  
+  }
+
+  .slick-dots.custom-dots {
+    bottom: -20px;
+    display: flex !important;
+    justify-content: center;
+
+    li {
+      width: 12px;
+      height: 12px;
+      margin: 0 5px;  
+
+      button {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border-radius: 50%;
+        background: transparent;
+        border: 2px solid #ddd;
+
+        &::before {
+          content: "";
+          width: 100%;
+          height: 100%;
+          background-color: #ddd;
+          border-radius: 50%;
+          display: block;
+          opacity: 0.5;
+        }
+      }
+
+      &.slick-active button {
+        background-color: #333;
+        border-color: #333;
+
+        &::before {
+          background-color: #333;
+          opacity: 1;
+        }
+      }
+    }
+  }
+`;
+
+const DotWrapper = styled.div`
+  display: inline-block;
+`;
+
+const Dot = styled.div<{ active: boolean }>`
+  width: 10px;
+  height: 10px;
+  background-color: ${({ active }) => (active ? "#333" : "#ddd")};
+  border-radius: 50%;
+  margin: 0 5px;
 `;

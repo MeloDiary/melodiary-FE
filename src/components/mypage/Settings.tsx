@@ -23,6 +23,7 @@ const Settings = () => {
   const storedUserId = localStorage.getItem('user_id');
   const userId = storedUserId ? Number(storedUserId) : null;
   
+  // 닉네임 중복확인 시 상태 업데이트 & 중복확인 상태 초기화
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
     setHasCheckedNickname(false);

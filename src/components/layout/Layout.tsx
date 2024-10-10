@@ -66,5 +66,6 @@ const MainLayout = styled.div`
 
 const MainContent = styled.div`
   width: 100%;
+  height: 100%;
   border-left: 1px solid ${({ theme }) => theme.color.grayDF};
 `;

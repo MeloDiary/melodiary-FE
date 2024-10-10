@@ -6,6 +6,8 @@ export const useMatesData = (userId: number | undefined) => {
   const [diaries, setDiaries] = useState<IDiary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if (userId === undefined) {
@@ -16,8 +18,10 @@ export const useMatesData = (userId: number | undefined) => {
 
     const fetchData = async () => {
       try {
-        const mateFeeds = await fetchMateFeeds(); 
-        setDiaries(mateFeeds);
+        setLoading(true);
+        const mateFeeds = await fetchMateFeeds(page); 
+        setDiaries((prevDiaries) => [...prevDiaries, ...mateFeeds]);
+        setHasMore(mateFeeds.length > 0); 
       } catch (err) {
         setError(err as Error);
       } finally {
@@ -26,7 +30,7 @@ export const useMatesData = (userId: number | undefined) => {
     };
 
     fetchData();
-  }, [userId]);
+  }, [userId, page]);
 
-  return { diaries, loading, error, setDiaries };
+  return { diaries, loading, error, setDiaries, setPage, hasMore };
 };

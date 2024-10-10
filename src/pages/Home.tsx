@@ -32,7 +32,7 @@ const Home = () => {
 
   const [selectedDiaryId, setSelectedDiaryId] = useState<number | null>(null);
 
-  const { diary, loading: diaryLoading } = useDiary(selectedDiaryId || 0);
+  const { diary, loading: diaryLoading, error } = useDiary(selectedDiaryId || 0);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -71,6 +71,10 @@ const Home = () => {
 
   if (diaryLoading) {
     return <Message>Loading...</Message>;
+  }
+  
+  if (error) {
+    throw new Error("네트워크 오류 발생: " + error.message);
   }
 
   return (
@@ -135,7 +139,7 @@ export default Home;
 const HomeWrapper = styled.div<RightSectionProps>`
   display: flex;
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -198,6 +202,7 @@ interface RightSectionProps {
 
 const Right = styled.div`
   flex: 1;
+  /* height: 100%; */
 `;
 
 const RightSection = styled(motion.div)<RightSectionProps>`

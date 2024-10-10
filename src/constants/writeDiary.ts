@@ -17,3 +17,20 @@ export const colors = [
 export const moods = ["😍", "😆", "🙂", "😟", "😡"];
 
 export const privacies = ["public", "mate", "private"];
+
+export const modules = {
+  toolbar: [
+    [{ 'font': [] }, { 'size': [] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'align': [] }],
+    ['link', 'image']
+  ]
+};
+
+export const formats = [
+  'font', 'size', 'bold', 'italic', 'underline', 'strike', 'color', 'background', 'header', 'blockquote', 'code-block', 'list', 'bullet',
+  'align', 'link', 'image'
+];

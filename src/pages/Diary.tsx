@@ -14,11 +14,12 @@ function Diary() {
   if (diaryLoading) {
     return <p>Loading...</p>;
   }
-
+  
   if (error || !diary) {
-    return <p>선택된 아이디의 다이어리 혹은 유저가 없습니다.</p>;
+    const errorMessage = error ? error.message : "Unknown error";
+    throw new Error("네트워크 오류 발생: " + errorMessage);
   }
-
+  
   return (
     <DiaryContainer backgroundColor={diary.body.background_color || undefined}>
       <DiaryItem

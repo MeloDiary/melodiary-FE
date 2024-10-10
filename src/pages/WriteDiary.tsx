@@ -12,7 +12,6 @@ import { useGeoLocation } from "../hooks/useGeoLocation";
 import { useDiaries, useUpdateDiary } from "../hooks/useDiary";
 import { IDiary } from "../models/diary.model";
 import { useLocation, useNavigate } from "react-router-dom";
-import CustomAlert from "../components/customAlert/CustomAlert";
 
 const geolocationOptions = {
   enableHighAccuracy: true,
@@ -37,7 +36,9 @@ const WriteDiary = () => {
   const routerLocation = useLocation();
   const diaryToEdit = routerLocation.state?.diary;
   const navigate = useNavigate();
-  const user_id = localStorage.getItem("user_id");
+  const user_id = localStorage.getItem('user_id');
+  const { saveDiary, loading } = useDiaries();
+  const { updateDiary, error: updateError } = useUpdateDiary();
 
   // 상태 변수 선언
   const [title, setTitle] = useState<string>("");
@@ -75,12 +76,6 @@ const WriteDiary = () => {
     }
   }, [diaryToEdit]);
 
-  const { saveDiary, loading, wirteDiaryErr } = useDiaries();
-  const {
-    updateDiary,
-    error: updateError,
-  } = useUpdateDiary();
-
   // 일기 데이터 작성 및 제출
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,6 +101,37 @@ const WriteDiary = () => {
       background_color: selectedBgColor || "default",
     };
 
+    const youtubeUrlPattern = /^(https?:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
+
+    if (!diaryData.title) {
+      window.alert("제목을 입력해주세요.");
+      return;
+    } 
+    if (!diaryData.music?.title) {
+      window.alert("음악 제목을 입력해주세요.");
+      return;
+    } 
+    if (!diaryData.music?.artist) {
+      window.alert("아티스트를 입력해주세요.");
+      return;
+    } 
+    if (!diaryData.music?.music_url) {
+      window.alert("음악 유튜브 링크를 입력해주세요.");
+      return;
+    } 
+    if (!youtubeUrlPattern.test(diaryData.music.music_url)) {
+      window.alert("올바른 유튜브 링크를 입력해주세요.");
+      return;
+    }
+    if (!diaryData.emoji) {
+      window.alert("오늘의 이모지를 선택해주세요.");
+      return;
+    } 
+    if (!diaryData.content) {
+      window.alert("일기 내용을 작성해주세요.");
+      return;
+    }
+
     // 모든 필드가 작성되었는지 확인하는 함수
     const isDiaryDataValid = Object.values(diaryData).every((value) => {
       if (typeof value === 'object' && value !== null) {
@@ -118,12 +144,14 @@ const WriteDiary = () => {
       if (diaryToEdit) {
         // 다이어리 수정의 경우
         await updateDiary(diaryToEdit.id, diaryData);
+        window.alert("일기가 수정되었습니다.");
+        navigate(`/diary/${diaryToEdit.id}`);
       } else {
         // 다이어리 저장의 경우
         if (isDiaryDataValid) {
           await saveDiary(diaryData);
           window.alert("일기가 저장되었습니다.");
-          navigate("/home");
+          navigate(`/home/${user_id}`);
         } else {
           window.alert("모든 항목을 작성해주세요.");
         }
@@ -153,8 +181,7 @@ const WriteDiary = () => {
   const { location, error } = useGeoLocation(geolocationOptions);
   let lat = location?.latitude;
   let long = location?.longitude;
-  // console.log("위도 : ", lat);
-  // console.log("경도 : ", long);
+
   const access_token = localStorage.getItem("access_token");
   useEffect(() => {
     //수정일 경우 호출 X
@@ -328,7 +355,7 @@ const WriteDiary = () => {
           <div className="icon" ref={emojiDropdownRef}>
             <div onClick={toogleEmojiDropdown}>
               <FiPlusCircle />
-              <span>아이콘 추가</span>
+              <span>이모지 추가</span>
             </div>
             {isEmojiDropdown && (
               <div className="emoji-picker">
@@ -454,7 +481,11 @@ const WriteDiary = () => {
           </div>
         </Section>
         {/* 일기 작성 에디터 */}
-        <DiaryEditor content={content} onChange={setContent} />
+        <DiaryEditor
+          content={content} 
+          onChange={setContent} 
+          // userId={Number(userId)} 
+        />
         {/* 미리보기, 등록하기 BTN */}
         <SubmitBox ref={previewOpenRef}>
           <Button
@@ -480,6 +511,8 @@ const WriteDiary = () => {
     </WriteDiaryWrapper>
   );
 };
+
+export default WriteDiary;
 
 const WriteDiaryWrapper = styled.div<{ bgColor: string }>`
   display: flex;
@@ -754,5 +787,3 @@ const SubmitBox = styled.div`
   align-items: center;
   gap: 12px;
 `;
-
-export default WriteDiary;

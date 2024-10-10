@@ -2,8 +2,13 @@ import { IDiary } from "../models/diary.model";
 import { httpClient } from "./http";
 
 // 친구 피드 API 호출
-export const fetchMateFeeds = async (): Promise<IDiary[]> => {
-  const response = await httpClient.get<IDiary[]>("/api/diaries/mates");
+export const fetchMateFeeds = async (page: number, limit: number = 5): Promise<IDiary[]> => {
+  const response = await httpClient.get<IDiary[]>("/api/diaries/mates", {
+    params: {
+      page,
+      limit,
+    },
+  });
   return response.data;
 };
 

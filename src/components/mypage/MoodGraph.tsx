@@ -42,7 +42,7 @@ const MoodGraph = () => {
 
   // 일기를 쓴 날짜에 점을 찍는 데이터 생성
   const seriesData = datesArray.map((date) => {
-    const moodEntry = mood?.moods.find(m => dayjs(m.date).format('YYYY-MM-DD') === date);
+    const moodEntry = mood?.moods.find(m => dayjs.tz(m.date).format('YYYY-MM-DD') === date);
     return moodEntry ? moods.length - moods.indexOf(moodEntry.mood) : 0; 
   });
 

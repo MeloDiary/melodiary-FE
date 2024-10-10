@@ -14,9 +14,10 @@ import Landing from "./pages/Landing";
 import Join from "./pages/Join";
 import Login from "./pages/Login";
 import Diary from "./pages/Diary";
-import NickName from './pages/Nickname';
-import Auth from './pages/Auth';
-import { AuthProvider, tokenLoader } from './context/AuthContext';
+import NickName from "./pages/Nickname";
+import Auth from "./pages/Auth";
+import { AuthProvider, tokenLoader } from "./context/AuthContext";
+import ErrorBoundary from "./components/error/ErrorBoundary";
 
 const App = () => {
   const routerList = [
@@ -34,7 +35,7 @@ const App = () => {
     },
     {
       path: "/explore",
-      component: <Explore/>, 
+      component: <Explore />,
     },
     {
       path: "/mates",
@@ -66,12 +67,12 @@ const App = () => {
       component: <Diary />,
     },
     {
-      path: '/nickname',
-      component: <NickName/>,
+      path: "/nickname",
+      component: <NickName />,
     },
     {
-      path: '/auth',
-      component: <Auth/>,
+      path: "/auth",
+      component: <Auth />,
     },
   ];
 
@@ -79,7 +80,11 @@ const App = () => {
     routerList.map((item) => {
       return {
         ...item,
-        element: <Layout>{item.component}</Layout>,
+        element: (
+          <Layout>
+            <ErrorBoundary>{item.component}</ErrorBoundary>
+          </Layout>
+        ),
       };
     })
   );

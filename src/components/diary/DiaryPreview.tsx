@@ -2,6 +2,9 @@ import styled from "styled-components";
 import DiaryContent from "./DiaryContent";
 import profile from "../../assets/images/mypage/mypage-bg.jpg";
 import MusicBar from "../musicbar/MusicBar";
+import { useMyPage } from "../../hooks/useMyPage";
+import { IDiary } from "../../models/diary.model";
+import { getPrivacyIcon } from "../../pages/WriteDiary";
 
 interface Props {
   title: string;
@@ -36,54 +39,57 @@ const DiaryPreview = ({
   avgTemperature,
   imgUrls,
 }: Props) => {
-  const diary = {
+  const { userProfile } = useMyPage();
+
+  // DiaryContent에서 요구하는 구조를 따른 diary 객체 생성
+  const diary: IDiary = {
     id: 1, // 임의로 설정
-    user_id: "damii",
+    user_profile: {
+      user_id: userProfile?.id!, 
+      nickname: userProfile?.nickname!, 
+      profile_img_url: userProfile?.profile_img_url!, 
+    },
     like_count: 0,
-    created_at: formattedDate,
+    created_at: formattedDate || null,
     body: {
-      title,
-      content,
-      img_urls: imgUrls,
-      mood: selectedMood,
-      emoji: selectedEmoji,
-      privacy: selectedPrivacy,
+      title: title || "", // title이 없을 때 빈 문자열을 기본값으로 설정
+      content: content || "", // content가 없을 때 빈 문자열을 기본값으로 설정
+      img_urls: imgUrls || null, // imgUrls이 없을 때 null로 설정
+      mood: selectedMood || null,
+      emoji: selectedEmoji || null,
+      privacy: selectedPrivacy === "private" || selectedPrivacy === "public" || selectedPrivacy === "mate" ? selectedPrivacy : "private",
       music: {
         title: musicTitle,
         artist: musicArtist,
-        music_url: musicUrl,
+        music_url: musicUrl
       },
       weather: {
+        location: location,
         icon: weatherIcon,
-        location,
-        avg_temperature: avgTemperature,
+        avg_temperature: Number(avgTemperature),
       },
-      background_color: selectedBgColor,
+      background_color: selectedBgColor || null,
     },
+    liked: false
   };
 
   return (
     <DiaryPreviewWrapper>
       <DiaryPreviewContents bgColor={selectedBgColor}>
+        <Privacy>{getPrivacyIcon(selectedPrivacy)}</Privacy>
         <Header>
           <div className="date">{formattedDate}</div>
           <ProfileWrapper>
             <div className="profile"></div>
-            <span>damii</span>
+            <span>{userProfile?.nickname}</span> {/* 실제 사용자 이름으로 변경 */}
           </ProfileWrapper>
         </Header>
         <Title>{title}</Title>
-        {/* <DiaryContent
+        <DiaryContent
           diary={diary} 
           isSummary={false} 
-          isExpanded={true} 
-          user={{
-            user_id: 0,
-            profileImgURL: null,
-            nickname: ""
-          }} 
-          likedUsers={[]} 
-        /> */}
+          isExpanded={true}
+        />
         <MusicBar
           isExpanded={true}
           title={musicTitle}
@@ -118,18 +124,31 @@ const DiaryPreviewContents = styled.div<{ bgColor: string }>`
   flex-direction: column;
   width: 80%;
   height: 90%;
-  padding: 60px 0;
+  padding: 80px 0;
   background-color: ${({ theme, bgColor }) =>
     theme.diaryColor[bgColor].background};
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
 
+const Privacy = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+  padding: 0 10%;
+  color: ${({ theme }) => theme.color.gray999};
+  font-size: ${({ theme }) => theme.text.text3};
+  cursor: pointer;
+`;
+
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   padding: 0 10%;
 
   .date {

@@ -20,7 +20,7 @@ const MusicBar = ({ youtubeUrl, title, artist, isExpanded }: MusicBarProps) => {
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState("0:00");
   const [duration, setDuration] = useState("0:00");
-  const intervalRef = useRef<NodeJS.Timeout | null>(null); 
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const getVideoId = (url: string) => {
     try {
@@ -93,7 +93,7 @@ const MusicBar = ({ youtubeUrl, title, artist, isExpanded }: MusicBarProps) => {
         }
         (window as any).onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
       } else {
-        onYouTubeIframeAPIReady(); // Already loaded
+        onYouTubeIframeAPIReady();
       }
     };
 
@@ -101,10 +101,10 @@ const MusicBar = ({ youtubeUrl, title, artist, isExpanded }: MusicBarProps) => {
 
     return () => {
       if (player) {
-        player.destroy(); // Prevent memory leaks
+        player.destroy();
       }
       if (intervalRef.current) {
-        clearInterval(intervalRef.current); // Clean up interval
+        clearInterval(intervalRef.current);
       }
     };
   }, [youtubeUrl, videoId]);
@@ -166,20 +166,46 @@ const MusicBar = ({ youtubeUrl, title, artist, isExpanded }: MusicBarProps) => {
         </TrackText>
         <ProgressContainer>
           <button onClick={handlePlayPause}>
-            {isPlaying ? <IoIosPause size={"24px"} /> : <IoIosPlay size={"24px"} />}
+            {isPlaying ? (
+              <IoIosPause size={"24px"} />
+            ) : (
+              <IoIosPlay size={"24px"} />
+            )}
           </button>
           <Time>{currentTime}</Time>
           <ProgressBar value={progress} isExpanded={isExpanded}>
-            <input type="range" min={0} max={100} step={1} value={progress} onChange={handleProgressChange} />
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={progress}
+              onChange={handleProgressChange}
+            />
           </ProgressBar>
           <Time>{duration}</Time>
         </ProgressContainer>
         <Controls>
           <VolumeButton onClick={toggleMute}>
-            {isMuted || volume === 0 ? <FaVolumeMute size={20} /> : <FaVolumeUp size={20} />}
+            {isMuted || volume === 0 ? (
+              <FaVolumeMute size={20} />
+            ) : (
+              <FaVolumeUp size={20} />
+            )}
           </VolumeButton>
-          <VolumeControl volume={volume} isMuted={isMuted} isExpanded={isExpanded}>
-            <input type="range" min={0} max={100} step={1} value={isMuted ? 0 : volume} onChange={handleVolumeChange} />
+          <VolumeControl
+            volume={volume}
+            isMuted={isMuted}
+            isExpanded={isExpanded}
+          >
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={isMuted ? 0 : volume}
+              onChange={handleVolumeChange}
+            />
           </VolumeControl>
         </Controls>
       </TrackInfo>
@@ -231,7 +257,7 @@ const TrackText = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  overflow: hidden; 
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 `;
@@ -250,7 +276,7 @@ const TrackArtist = styled.div`
 const ProgressContainer = styled.div`
   display: flex;
   align-items: center;
-  overflow: hidden; 
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
@@ -331,7 +357,11 @@ const VolumeButton = styled.button`
   }
 `;
 
-const VolumeControl = styled.div<{ volume: number; isMuted: boolean; isExpanded: boolean }>`
+const VolumeControl = styled.div<{
+  volume: number;
+  isMuted: boolean;
+  isExpanded: boolean;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;

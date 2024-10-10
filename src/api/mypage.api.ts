@@ -10,8 +10,10 @@ export const fetchUserProfile = async (userId: number) => {
 };
 
 // 전체 일기 조회 api
-export const fetchAllDiaries = async () => {
-  const response = await httpClient.get<IDiary[]>("/api/diaries/myposts");
+export const fetchAllDiaries = async (page: number, limit: number) => {
+  const response = await httpClient.get<IDiary[]>("/api/diaries/myposts", {
+    params: { page, limit }
+  });
 
   return response.data;
 };

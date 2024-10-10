@@ -31,7 +31,7 @@ export const createClient = (config?: AxiosRequestConfig) => {
     timeout: DEFAULT_TIMEOUT,
     headers: {
       "content-type": "application/json",
-      'Cache-Control': 'no-cache'  // 304 응답을 방지하기 위해 추가했습니다!
+      'Cache-Control': 'no-cache'
     },
     withCredentials: true,
     ...config

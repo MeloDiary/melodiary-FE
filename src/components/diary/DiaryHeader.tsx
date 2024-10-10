@@ -49,7 +49,7 @@ const DiaryHeader: React.FC<DiaryItemProps> = ({
 
   const handleCloseSuccessAlert = () => {
     setIsDeleteSuccessAlertVisible(false);
-    navigate(-1);
+    navigate(0);
   };
 
   const renderPrivacyIcon = () => {

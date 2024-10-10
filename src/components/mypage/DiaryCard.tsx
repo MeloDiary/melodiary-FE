@@ -5,7 +5,7 @@ import { IDiary } from '../../models/diary.model';
 type DiaryCardProps = Pick<IDiary, 'id' | 'created_at' | 'body'>;
 
 export const handleFormatDate = (created_at: string) => {
-  const date = new Date(created_at);
+  const date = new Date(created_at.split('T')[0]);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',

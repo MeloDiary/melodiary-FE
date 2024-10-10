@@ -24,7 +24,7 @@ const Sidebar = () => {
     <SidebarWrapper>
       {links.map((link) => {
         const isActive = location.pathname === link.to;
-        // const isActive = location.pathname.startsWith(link.to);
+        
         return (
           <SidebarLink 
             as="div"

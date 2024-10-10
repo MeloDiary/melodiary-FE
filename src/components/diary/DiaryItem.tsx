@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import styled from "styled-components";
 import DiaryHeader from "./DiaryHeader";
 import DiaryContent from "./DiaryContent";
@@ -31,7 +31,14 @@ const DiaryItem: React.FC<DiaryItemProps> = ({
 
   const background_color = diary.body.background_color || "default";
 
-  const handleDiaryClick = () => {
+  const handleDiaryClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    
+    if (target.closest('.slick-dots') || target.closest('.slick-arrow')) {
+      e.stopPropagation(); 
+      return;
+    }
+
     if (isSummary) {
       navigate(`/diary/${diary.id}`);
     }
@@ -101,7 +108,7 @@ const DiaryContainer = styled.div<DiaryAllProps>`
   position: relative;
   top: 0;
   height: ${({ isExpanded, isSummary }) =>
-    isExpanded ? "100vh" : isSummary ? "auto" : "auto"};
+    isExpanded ? "100%" : isSummary ? "auto" : "auto"};
   overflow-y: ${({ isExpanded, isSummary }) =>
     isExpanded ? "auto" : isSummary ? "visible" : "hidden"};
   overflow-x: hidden;
@@ -113,7 +120,9 @@ const DiaryContainer = styled.div<DiaryAllProps>`
   border-radius: ${({ isSummary }) => (isSummary ? "20px" : "0")};
   border: ${({ isSummary, theme }) =>
     isSummary ? `1px solid ${theme.color.grayDF}` : "none"};
-  max-width: ${({ isExpanded }) => (isExpanded ? "100vw" : "50vw")};
+  max-width: ${({ isExpanded, isSummary }) =>isExpanded ? "100vw" : isSummary ? "50vw" : "50vw"};
+  width: ${({ isExpanded, isSummary }) =>
+    isExpanded ? "" : isSummary ? "50vw" : ""};
 `;
 
 const Diary = styled.div<DiarySummaryProps>`
