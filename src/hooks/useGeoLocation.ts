@@ -32,4 +32,4 @@ export const useGeoLocation = (options = {}) => {
   }, [options]);
 
   return { location, error };
-}
+};

@@ -15,7 +15,6 @@ const NotificationDropdown = React.forwardRef<
   NotificationDropdownProps
 >(({ notifications, loading, markAsRead }, ref) => {
   const navigate = useNavigate();
-  const { handleSearch } = useSearchUser();
 
   const handleNotificationClick = async (notification: INotification) => {
     markAsRead(notification.notification_id);
@@ -60,6 +59,8 @@ const NotificationDropdown = React.forwardRef<
   );
 });
 
+export default NotificationDropdown;
+
 const Dropdown = styled.div`
   position: absolute;
   top: 100%;
@@ -97,6 +98,7 @@ const NotificationItem = styled.div`
   padding: 12px 16px;
   border-bottom: 1px solid ${({ theme }) => theme.color.grayDF};
   cursor: pointer;
+
   &:last-child {
     border-bottom: none;
   }
@@ -106,6 +108,7 @@ const NotificationContent = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+
   p {
     margin: 0;
     text-align: left;
@@ -118,5 +121,3 @@ const Time = styled.span`
   font-size: 12px;
   white-space: nowrap;
 `;
-
-export default NotificationDropdown;

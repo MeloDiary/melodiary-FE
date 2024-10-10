@@ -51,7 +51,7 @@ const Settings = () => {
     }
   };
 
-  // ghldn
+  // 회원 탈퇴 BTN
   const handleDeleteAccountBtn = () => {
     if (window.confirm('정말 탈퇴하시겠습니까?')) {
       const storedUserId = localStorage.getItem('user_id');

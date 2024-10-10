@@ -54,5 +54,4 @@ export const saveBackgroundImage = async ( imageUrl: string) => {
   } catch (error) {
     console.error('Error saving background image:', error);
   }
-
 };

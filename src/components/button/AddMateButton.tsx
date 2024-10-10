@@ -194,12 +194,11 @@ const DropdownItem = styled.button`
   padding: 5px 10px;
   border: 1px solid ${({ theme }) => theme.color.primary};
   border-radius: 5px;
-
   background-color: ${({ theme }) => theme.color.white};
   color: ${({ theme }) => theme.color.primary};
   font-size: 0.78rem;
-
   cursor: pointer;
+  
   &:hover {
     background-color: ${({ theme }) => theme.color.primaryHover};
     color: ${({ theme }) => theme.color.white};

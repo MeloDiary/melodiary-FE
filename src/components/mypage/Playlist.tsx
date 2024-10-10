@@ -63,7 +63,7 @@ const PlayList = () => {
 
     fetchAllPlaylistData();
   }, [userId]);
- 
+
   const handlePageChange = (pageNumber: number) => {
     if (pageNumber !== currentPage && pageNumber > 0 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
@@ -130,7 +130,7 @@ const PlayList = () => {
 
   return (
     <PlaylistContainer>
-       <TableContainer>
+      <TableContainer>
       <Table>
         <thead>
           <tr>
@@ -172,6 +172,7 @@ const PlaylistContainer = styled.div`
   margin: auto;
   text-align: center;
 `;
+
 const TableContainer = styled.div`
   position: relative;
   width: 100%;
@@ -179,17 +180,20 @@ const TableContainer = styled.div`
   margin: auto;
   text-align: center;
 `;
+
 const Table = styled.table`
   width: 100%;
   height: calc(40px * 6);
   border-collapse: separate; 
   border-spacing: 0; 
   border: none;
-  table-layout: fixed; 
+  table-layout: fixed;
+
   .playListHeader th {
     border-bottom: 1px solid ${({ theme }) => theme.color.gray777};
     font-family: ${({ theme }) => theme.fontFamily.kor};
   }
+
   th, td {
     height: 46px;
     padding: 12px 10px;
@@ -201,21 +205,27 @@ const Table = styled.table`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   th {
     color: ${({ theme }) => theme.color.gray777};
-    }
+  }
+
   th:nth-child(1), td:nth-child(1) {
     width: 40%; 
   }
+
   th:nth-child(2), td:nth-child(2) {
     width: 30%; 
   }
+
   th:nth-child(3), td:nth-child(3) {
     width: 30%; 
   }
+
   th:nth-child(4), td:nth-child(4) {
     width: 10%; 
   }
+
   .view-link {
     color: ${({ theme }) => theme.color.gray999};
   }
@@ -253,13 +263,12 @@ const StyledLink = styled(Link)`
     transform-origin: bottom center;
     transform: scaleX(1); 
   }
-    &:hover {
+
+  &:hover {
     text-decoration: none; 
     color: ${({ theme }) => theme.color.gray777}; 
   }
 `;
-
-
 
 const Pagination = styled.div`
   display: flex;
@@ -267,6 +276,7 @@ const Pagination = styled.div`
   align-items: center;
   margin-top: 15px;
 `;
+
 const ArrowButton = styled.button`
   display: flex;
   align-items: center;
@@ -275,7 +285,8 @@ const ArrowButton = styled.button`
   background: none;
   font-size: 1.3rem;
   cursor: pointer;
-  color: ${({ theme }) => theme.color.grayblack}; 
+  color: ${({ theme }) => theme.color.grayblack};
+
   &:disabled {
     color: ${({ theme }) => theme.color.grayDF};
     cursor: default;
@@ -292,6 +303,7 @@ const PageNumber = styled.button<{ isActive: boolean }>`
   background-color: ${({ isActive }) => (isActive ? ({ theme }) => theme.color.lightblue : ({ theme }) => theme.color.white )};
   color: ${({ isActive }) => (isActive ? ({ theme }) => theme.color.white : '#000')};
   cursor: pointer;
+  
   &:hover {
     background-color: ${({ theme }) => theme.color.lightblue30};
     color: #000;

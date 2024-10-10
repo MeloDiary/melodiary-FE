@@ -167,7 +167,8 @@ const Header = () => {
   );
 };
 
-/* 스타일 컴포넌트 */
+export default Header;
+
 const HeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -181,6 +182,7 @@ const HeaderWrapper = styled.div`
 const Logo = styled.div`
   display: flex;
   align-items: center;
+
   svg {
     margin-left: 20px;
     color: ${({ theme }) => theme.color.gray999};
@@ -207,6 +209,7 @@ const ButtonContainer = styled.div`
   display: flex;
   margin-right: 20px;
   flex-direction: row;
+
   button {
     white-space: nowrap;
   }
@@ -215,6 +218,7 @@ const ButtonContainer = styled.div`
 const Icons = styled.div`
   display: flex;
   align-items: center;
+
   svg {
     color: ${({ theme }) => theme.color.gray999};
     margin-right: 20px;
@@ -242,7 +246,7 @@ const Profile = styled.div`
   }
 `;
 
-const DefaultProfileIcon = styled(FaUserCircle)`
+export const DefaultProfileIcon = styled(FaUserCircle)`
   width: 32px;
   height: 32px;
   margin-top: 0;
@@ -258,6 +262,7 @@ const IconButton = styled.button`
   margin: 0;
   color: ${({ theme }) => theme.color.gray999};
   cursor: pointer;
+
   &:hover {
     svg {
       color: ${({ theme }) => theme.color.grayblack};
@@ -282,16 +287,17 @@ const DropdownItem = styled.div`
   align-items: center;
   padding: 8px 16px;
   cursor: pointer;
+
   &:hover {
     background: ${({ theme }) => theme.color.grayLight};
   }
+
   span {
     margin: 8px;
   }
+
   svg {
     margin-right: 8px;
     color: ${({ theme }) => theme.color.grayblack};
   }
 `;
-
-export default Header;

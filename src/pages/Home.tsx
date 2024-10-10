@@ -7,7 +7,6 @@ import MusicBar from "../components/musicbar/MusicBar";
 import Calendar from "../components/diary/Calender";
 import PlayList from "../components/diary/PlayList";
 import { useDiary } from "../hooks/useDiary";
-import { useUserData } from "../hooks/useUserData";
 import { motion } from "framer-motion";
 import AddMateButton from "../components/button/AddMateButton";
 
@@ -105,7 +104,7 @@ const Home = () => {
           }}
           transition={{ duration: 0.5, ease: "linear" }}
         >
-           {diary && selectedDiaryId ? (
+          {diary && selectedDiaryId ? (
             <>
               <DiaryItem
                 diary={diary}
@@ -202,7 +201,6 @@ interface RightSectionProps {
 
 const Right = styled.div`
   flex: 1;
-  /* height: 100%; */
 `;
 
 const RightSection = styled(motion.div)<RightSectionProps>`
@@ -227,6 +225,7 @@ const Message = styled.div`
   width: 100%;
   text-align: center;
   background-color: white;
+  
   p {
     font-size: ${({ theme }) => theme.text.text1};
     color: ${({ theme }) => theme.color.gray777};

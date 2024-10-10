@@ -12,7 +12,6 @@ import Modal from '../components/modal/signupModal';
 import { useAuth } from '../context/AuthContext';
 import { useUserStore } from '../store/authStore';
 
-
 const NaverConvertURL = (url : string) => {
   // 'state=' 이후부터 문자열 끝까지 추출
   const stateParamStart = url.indexOf('state=') + 6;
@@ -31,8 +30,6 @@ const NaverConvertURL = (url : string) => {
     return undefined;
   }
 };
-
-
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -68,7 +65,7 @@ const Auth = () => {
         
         try {
           let response;
-           if (action === 'signup') {
+          if (action === 'signup') {
             response = await signUp(authData);
           } else if (action === 'login') {
             response = await login(authData); 
@@ -103,9 +100,17 @@ const Auth = () => {
     };
 
     handleOAuth();
-  }, [navigate, stateParam, code, setUserId, setAuthToken, completeSignup, action, urlParams]);
+  }, [
+    navigate, 
+    stateParam, 
+    code, 
+    setUserId, 
+    setAuthToken, 
+    completeSignup, 
+    action, 
+    urlParams
+  ]);
 
-  
   const closeModal = () => {
     setModalMessage(null);
     if(action === 'signup'){
@@ -200,6 +205,7 @@ const Button = styled.button`
   font-size: 1rem;
   font-weight: 600;
   transition: background-color 0.3s;
+  
   &.google {
     background-color: ${({ theme }) => theme.color.white};
     color: ${({ theme }) => theme.color.black};

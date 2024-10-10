@@ -8,9 +8,11 @@ import { FaFacebook } from "react-icons/fa";
 import { GOOGLE_SIGNUP_URL, KAKAO_SIGNUP_URL, NAVER_SIGNUP_URL, FACEBOOK_SIGNUP_URL } from '../config';
 import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
+
 const Join = () => {
   const {isAuthenticated} = useAuth();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (isAuthenticated) {
       const userId =  localStorage.getItem('user_id');
@@ -97,6 +99,7 @@ const Button = styled.button`
   font-size: 1rem;
   transition: background-color 0.3s;
   cursor: pointer;
+
   &.google {
     background-color: ${({ theme }) => theme.color.white};
     color: ${({ theme }) => theme.color.black};
@@ -139,6 +142,7 @@ const LoginLink = styled.div`
   margin-top: 0.5rem;
   font-size: 0.9rem;
   color: ${({ theme }) => theme.color.gray777};
+  
   .loginBtn{
     color: ${({ theme }) => theme.color.gray777};
     text-decoration: underline;

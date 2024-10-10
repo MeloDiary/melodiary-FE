@@ -216,6 +216,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   );
 };
 
+export default CommentSection;
+
 const CommentsContainer = styled.div`
   background-color: none;
   border-top: 1px solid ${({ theme }) => theme.color.grayDF};
@@ -324,5 +326,3 @@ const CommentButton = styled.button`
     padding-top: 2px;
   }
 `;
-
-export default CommentSection;

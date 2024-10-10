@@ -32,7 +32,6 @@ const DiaryCard = ({
     navigate(`/diary/${id}`);
   };
 
-
   return (
     <DiaryCardWrapper
       bgColor={body.background_color ?? "default"}
@@ -42,8 +41,8 @@ const DiaryCard = ({
       <DiaryTitle>{body.title}</DiaryTitle>
       <DiaryTagBox bgColor={body.background_color ?? "default"}>
         <div className="weather">날씨 | {body.weather?.avg_temperature} °C</div>
-        <div className="mood">기분 | {body.emoji}</div>
-        <div className="emoji">오늘의 이모지 | {body.mood}</div>
+        <div className="mood">기분 | {body.mood}</div>
+        <div className="emoji">오늘의 이모지 | {body.emoji}</div>
       </DiaryTagBox>
       <DiaryContent>{handleScriptHtml(body.content)}</DiaryContent>
     </DiaryCardWrapper>

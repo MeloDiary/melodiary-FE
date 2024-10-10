@@ -8,9 +8,10 @@ import { useAuth } from '../context/AuthContext';
 
 const NickName = () => {
   const [nickname, setNickname] = useState<string>(''); // 닉네임 상태 관리
-  const { login: setAuthToken } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const { login: setAuthToken } = useAuth();
   const { isSignupComplete, setIsSignupComplete } = useAuth();
 
   useEffect(() => {
@@ -65,11 +66,13 @@ const NickName = () => {
           여러분만의 닉네임을 입력하고 시작해보세요.
         </WelcomeMessage>
         <InputWrapper>
-          <NicknameInput placeholder="닉네임을 입력하세요"  
+          <NicknameInput 
+            placeholder="닉네임을 입력하세요"  
             value={nickname} 
             onChange={handleNicknameChange} 
-            isError={!!errorMessage}  />
-           <InputInfo isError={!!errorMessage}>
+            isError={!!errorMessage}
+          />
+          <InputInfo isError={!!errorMessage}>
             {errorMessage || "2 ~ 14자로 입력해주세요."}
           </InputInfo>
         </InputWrapper>
@@ -78,6 +81,8 @@ const NickName = () => {
     </PageWrapper>
   );
 };
+
+export default NickName;
 
 const PageWrapper = styled.div`
   display: flex;
@@ -101,9 +106,11 @@ const Logo = styled.div`
   align-items: center;
   margin-bottom: 5px;
   font-family: ${({ theme }) => theme.fontFamily.kor};
+
   svg {
     color: ${({ theme }) => theme.color.gray999};
   }
+
   h3 {
     margin-left: 10px;
     background: linear-gradient(90deg, #9ad9ea, #202879);
@@ -159,11 +166,10 @@ const EnterButton = styled.button`
   color: ${({ theme }) => theme.color.primary};
   cursor: pointer;
   font-family: ${({ theme }) => theme.fontFamily.kor};
+
   &:hover {
     color: ${({ theme }) => theme.color.white};
     background-color: ${({ theme }) => theme.color.primary};
     border: 1px solid ${({ theme }) => theme.color.primary};
   }
 `;
-
-export default NickName;

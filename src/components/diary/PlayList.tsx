@@ -184,11 +184,13 @@ const Table = styled.table`
   border-collapse: separate; 
   border-spacing: 0; 
   table-layout: fixed; 
-  height: calc(40px * 6); 
+  height: calc(40px * 6);
+
   .playListHeader th {
     border-bottom: 1px solid ${({ theme }) => theme.color.grayDF};
     font-family: ${({ theme }) => theme.fontFamily.kor};
   }
+
   th, td {
     padding: 12px 10px;
     border: none;
@@ -198,12 +200,15 @@ const Table = styled.table`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   th:nth-child(1), td:nth-child(1) {
     width: 40%; 
   }
+
   th:nth-child(2), td:nth-child(2) {
     width: 30%; 
   }
+
   th:nth-child(3), td:nth-child(3) {
     width: 30%; 
   }
@@ -239,7 +244,8 @@ const ArrowButton = styled.button`
   background: none;
   font-size: 1.3rem;
   cursor: pointer;
-  color: ${({ theme }) => theme.color.grayblack}; 
+  color: ${({ theme }) => theme.color.grayblack};
+
   &:disabled {
     color: ${({ theme }) => theme.color.grayDF};
     cursor: default;
@@ -256,6 +262,7 @@ const PageNumber = styled.button<{ isActive: boolean }>`
   background-color: ${({ isActive }) => (isActive ? ({ theme }) => theme.color.lightblue : ({ theme }) => theme.color.white )};
   color: ${({ isActive }) => (isActive ? ({ theme }) => theme.color.white : '#000')};
   cursor: pointer;
+  
   &:hover {
     background-color: ${({ theme }) => theme.color.lightblue30};
     color: #000;
